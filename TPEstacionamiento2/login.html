@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Estacionamiento</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+   
+    <link href="./node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+    <link href="css/fondoLogin.css" rel="stylesheet">
+    <style>
+      .container{margin-top:100px}
+    </style>
+      <script src="./Persona.js"></script>
+      <script src="./Usuario.js"></script>
+       <script src="./funciones.js"></script>
+       <script src="./node_modules\jquery\dist/jquery.min.js"></script>
+
+     </head>
+  <body>
+ <div class="container">
+      <div class="row vertical-offset-100">
+        <div class="col-md-4 col-md-offset-4">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Ingrese sus datos</h3>
+           </div>
+            <div class="panel-body">
+              
+                      <fieldset>
+
+  <form data-toggle="validator" accept-charset="UTF-8" role="form" method="post" action="login.php" >
+ 
+
+  <div class="form-group">
+    <label for="inputEmail" class="control-label">Correo Electronico</label>
+    <input type="email" class="form-control" name="correo" placeholder="correo" id="correo" value="" data-error="Bruh, correo invalido" >
+    <div class="help-block with-errors"></div>
+  </div>
+  <div class="form-group">
+    <label for="inputPassword" class="control-label">Password</label>
+    <div class="form-inline row">
+      <div class="form-group col-sm-6">
+        <input type="password"  class="form-control" name="clave" value="" id="clave" placeholder="contraseña" >
+        
+      </div>
+    </div>
+  </div>
+ 
+  <div class="form-group">
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" id="checkbox" name="recordar" value="si">
+        Recordarme
+      </label>
+      <div class="help-block with-errors"></div>
+    </div>
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary" onclick="ValidaRecordarDatos();" >Ingresar</button>
+  </div>
+   <div class="form-group">
+                  <button type="submit" class="btn btn-primary btn-lg" onclick="IngresoUsuario();">Test Usuario</button>
+                  <button type="submit" class="btn btn-primary btn-lg" onclick="IngresoAdmin();">Test Admin</button>
+                </div>
+</form>
+ </fieldset>
+
+</div> 
+       </div>
+      </div>
+    </div>
+  </div>
+  </body>
+</html>

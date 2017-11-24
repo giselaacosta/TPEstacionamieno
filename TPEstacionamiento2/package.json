@@ -1,0 +1,16 @@
+{
+  "name": "tpestacionamiento2",
+  "version": "1.0.0",
+  "main": "Persona.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/jquery": "^3.2.16",
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.2.1"
+  },
+  "description": ""
+}

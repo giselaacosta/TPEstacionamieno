@@ -1,0 +1,9 @@
+body{
+    
+        background:url('../imagen/estacionamiento2.jpg');
+        background-size:100%;
+        height: 80px;
+        display:block;
+        padding:0 !important;
+        margin:0;
+    }
