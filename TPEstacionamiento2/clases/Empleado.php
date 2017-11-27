@@ -150,7 +150,7 @@ class Empleado
 	public static function TraerUnEmpleado($id) 
 	{
 			$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-			$consulta =$objetoAccesoDato->RetornarConsulta("select id,nombre as foto, apellido as apellido,clave as clave,mail as mail,turno as turno,perfil as perfil,fechacreacion as fechacreacion,foto as foto  from empleados where id = $id");
+			$consulta =$objetoAccesoDato->RetornarConsulta("select id,nombre as nombre, apellido as apellido,clave as clave,mail as mail,turno as turno,perfil as perfil,fechacreacion as fechacreacion,foto as foto  from empleados where id = $id");
 			$consulta->execute();
 			$empleadoBuscado= $consulta->fetchObject('Empleado');
 			return $empleadoBuscado;				

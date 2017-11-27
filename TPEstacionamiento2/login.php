@@ -53,7 +53,7 @@ foreach($resultado as $fila)
     }
     else
     {
-        header('Location: index.html');
+        header('Location: indexUser.html');
 
     }
     $existe=true;

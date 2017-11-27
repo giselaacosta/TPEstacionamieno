@@ -1,0 +1,25 @@
+body{
+    
+        background:url('../imagen/est.jpg');
+        background-size:100%;
+        height: 80px;
+        display:block;
+        padding:0 !important;
+        margin:0;
+    }
+
+    .oculto
+    
+    {
+    
+      display:none;
+    }
+    
+    .visible
+    
+    {
+    
+      display:inline;
+    }
+    
+    
