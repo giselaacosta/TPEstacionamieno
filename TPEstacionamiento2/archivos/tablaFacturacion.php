@@ -1,0 +1,1 @@
+ <table border=1><th> patente </th><th> Importe </th><tr> <td> aqx113</td> <td>  203100</td> </tr><tr> <td> aaa111</td> <td>  -5664815910</td> </tr><tr> <td> aqx101</td> <td>  1893360990</td> </tr><tr> <td> asd123</td> <td>  -3776519565</td> </tr><tr> <td> ddd345</td> <td>  -4131464325</td> </tr> </table>

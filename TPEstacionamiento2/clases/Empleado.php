@@ -142,7 +142,7 @@ class Empleado
   	public static function TraerTodoLosEmpleados()
 	{
 			$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-			$consulta =$objetoAccesoDato->RetornarConsulta("select id,nombre as foto, apellido as apellido,clave as clave,mail as mail,turno as turno,perfil as perfil,fechacreacion as fechacreacion,foto as foto  from empleados");
+			$consulta =$objetoAccesoDato->RetornarConsulta("select id,nombre as nombre, apellido as apellido,clave as clave,mail as mail,turno as turno,perfil as perfil,fechacreacion as fechacreacion,foto as foto  from empleados");
 			$consulta->execute();			
 			return $consulta->fetchAll(PDO::FETCH_CLASS, "Empleado");		
 	}
