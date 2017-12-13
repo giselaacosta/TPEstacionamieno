@@ -5,7 +5,7 @@ var arrayusuarios;
 function Agregar() {
     var logueos = localStorage.getItem("usuarioslogueados");
     arrayusuarios = JSON.parse(logueos);
-    var correo = document.getElementById("correo");
+    var correo = document.getElementById("email");
     var clave = document.getElementById("clave");
     var tipo = "logueo";
     var usuario = new personas.Usuario(tipo, correo.value, clave.value);
@@ -17,17 +17,16 @@ function Agregar() {
         arrayusuarios.push(usuario);
     }
     localStorage.setItem("usuarioslogueados", JSON.stringify(arrayusuarios));
-    alert("Los datos han sido almacenados");
 }
 function IngresoUsuario() {
-    document.getElementById("correo").value = "gise@gise";
+    document.getElementById("email").value = "gise@gise";
     document.getElementById("clave").value = "123";
 }
 function IngresoAdmin() {
-    document.getElementById("correo").value = "gi@acosta";
+    document.getElementById("email").value = "gi@acosta";
     document.getElementById("clave").value = "2222";
 }
-function ValidaRecordarDatos() {
+function RecordarDatos() {
     if (document.getElementById('checkbox').checked == true) {
         Agregar();
     }
