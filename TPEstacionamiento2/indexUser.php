@@ -5,6 +5,8 @@
         <meta charset="UTF-8">
         <title>Estacionamiento Administracion</title>
         <link href="./node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+         
+
         <link href="css/fondoAdmin.css" rel="stylesheet">
         <link href="css/estilo.css" rel="stylesheet">
         <link href="css/style.css" rel="stylesheet">
@@ -16,6 +18,7 @@
            
            <script src="./node_modules\jquery\dist/jquery.min.js"></script>
            <script src="./js/ajax.js"></script>
+         
            <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
            <link rel="stylesheet" type="text/css" href="css/jquery-ui-1.8.6.css" />
 <style>
@@ -33,12 +36,22 @@
 <script type="text/javascript" src="./js/jquery-ui-1.8.6.min.js"></script>
 
 <script src="./js/runonload.js"></script>
-       
-
+    <script src="./js/jquery.validate.js"></script>    
+     <script src="./js/jquery.validate.min.js"></script>    
+  <script src="./js/validador.js"></script>
 
 <script type="text/javascript">
 
+function ObtenerDatos()
+{
+   var email= localStorage.getItem("useractual"); 
 
+
+   
+  document.getElementById("user").innerHTML +="<h3>"+email+"</h3>";
+  
+
+}
 
 function Modal()
 {
@@ -57,9 +70,63 @@ $(document).ready(function() {
         
     });  
 
-	
 
- 
+
+  
+  $('.delete').click(function(){
+    
+
+    
+       var service = $(this).attr('id');
+
+        var dataString = 'id=' + service ;
+
+        $.ajax({
+            type: "POST",
+            url: "usuariobaja.php",
+            data: dataString,
+         
+            success: function() {
+              $('#empleados_form').html("<div id='message'></div>");
+                $('#message').html("<h2>Se ha eliminado correctamente!</h2>")
+                .hide()
+                .fadeIn(1500, function() {
+              window.location.reload(true);
+             
+                });
+            }
+        });
+        
+        
+    });   
+
+
+    $('.deletefacturado').click(function(){
+    
+
+    
+       var service = $(this).attr('id');
+
+        var dataString = 'id=' + service ;
+
+        $.ajax({
+            type: "POST",
+            url: "facturadobaja.php",
+            data: dataString,
+         
+            success: function() {
+              $('#empleados_form').html("<div id='message'></div>");
+                $('#message').html("<h2>Se ha eliminado correctamente!</h2>")
+                .hide()
+                .fadeIn(1500, function() {
+              window.location.reload(true);
+             
+                });
+            }
+        });
+        
+        
+    });   
     
 
     $('#sacar-btn').click(function(){
@@ -71,17 +138,14 @@ $(document).ready(function() {
        var horasalida = document.getElementById("horasalida").value;
        var tiempotranscurrido = document.getElementById("tiempotranscurrido").value;
        var importe = document.getElementById("importe").value;
-        var dataString = 'id=' + id + '&fechasalida=' + fechasalida + '&horasalida=' + horasalida + '&tiempotranscurrido=' + tiempotranscurrido + '&importe=' + importe;
-;
-  
-        $.ajax({
+       var cochera = document.getElementById("cochera").value;
+       var dataString='id='+id+'&fechasalida='+fechasalida+'&horasalida='+horasalida+ '&tiempotranscurrido='+tiempotranscurrido+'&cochera='+cochera+'&importe='+importe;
+       $.ajax({
             type: "POST",
             url: "estacionadobaja.php",
             data: dataString,
          
-      })
-
-        .done(function(resultado) {
+      }).done(function(resultado) {
       
       localStorage.setItem("fact",resultado),
       $('#modal3').html("<div id='message'></div>");
@@ -90,8 +154,7 @@ $(document).ready(function() {
               .fadeIn(1500, function() {
                
             window.location.reload(true);
-      })
-      .fail(function(){
+      }).fail(function(){
         alert(resultado);
         alert('Error al eliminar auto.')
         
@@ -103,75 +166,12 @@ $(document).ready(function() {
    
     });
     
-    
-    $('#botonIngreso').click(function(){
-    
-      var service =  document.getElementById("patente").value;
-       var dataString = 'patente=' + service ;
-     
-        $.ajax({
-            type: "POST",
-            url: "gestionEntrada.php",
-            data: dataString
-         
-      })
-      .done(function(resultado) {
-      
-
-      $('#altaestacionado').html("<div id='message'></div>");
-              $('#message').html("<h2>Se ha agregado correctamente!</h2>")
-              .hide()
-              .fadeIn(1500, function() {
-               
-            window.location.reload(true);
-      })
-      .fail(function(){
-        alert('Error al ingresar auto.')
-        
-      })     
-
-
-})
-   
-});   
-    
-$('#botonBusqueda').click(function(){
-    
-      var service =  document.getElementById("search").value;
-       var dataString = 'busqueda=' + service ;
-       
-        $.ajax({
-            type: "POST",
-            url: "Busqueda.php",
-            data: dataString
-         
-      })
-      .done(function(resultado) {
-      
-
-      $('#busqueda').html("<div id='message'></div>");
-              $('#message').html("<h2>Los resultados son:</h2>")
-              .hide()
-              .fadeIn(1500, function() {
-               
-           
-      })
-      .fail(function(){
-        alert('No se encuentran registros.')
-        
-      })     
-
-
-})
-   
-});   
-    
 
 
    
     $('.facturados').click(function(){
       document.getElementById("listafacturados").className ="visible";  
-
+    
       document.getElementById("altaestacionado").className ="oculto";  
       document.getElementById("grilladeestacionados").className ="oculto";  
       document.getElementById("listaprecios").className ="oculto";  
@@ -181,18 +181,272 @@ $('#botonBusqueda').click(function(){
  
    
     $('.altaestacionado').click(function(){
-   
+     
       document.getElementById("altaestacionado").className ="visible";
       document.getElementById("grilladeestacionados").className ="oculto";
       document.getElementById("listaprecios").className ="oculto";
       document.getElementById("listafacturados").className ="oculto";  
     });  
+    $('.edit').click(function(){
+    
 
+      jQuery('#modal2').modal('show');
+       var service = $(this).attr('id');
+
+        var dataString = 'id=' + service ;
+        var usuarioamodif;
+        var myArr;
+        $.ajax({
+            type: "POST",
+            url: "usuariobusqueda.php",
+            data: dataString
+         
+      })
+      .done(function(resultado) {
+      
+      localStorage.setItem("usuarioamodificar",resultado),
+      usuarioamodif=localStorage.getItem("usuarioamodificar"),  
+      myArr = JSON.parse(usuarioamodif) , 
+      document.getElementById("idamodif").value =myArr.id,
+      document.getElementById("nombremodif").value =myArr.nombre,
+      document.getElementById("apellidomodif").value =myArr.apellido,
+      document.getElementById("correomodif").value =myArr.mail,
+      document.getElementById("clavemodif").value =myArr.clave,
+      document.getElementById("perfilmodif").value =myArr.perfil,
+      document.getElementById("turnomodif").value =myArr.turno,
+      document.getElementById("fechacreacionmodif").value =myArr.fechacreacion,
+    document.getElementById("fotoanterior").value=myArr.foto,
+ 
+       document.getElementById("imagenamodificar").src = 'fotosEmpleados/'+myArr.foto
+      })
+      .fail(function(){
+
+        alert('Hubo un error')
+      })     
+
+
+});
+
+
+$('.editfacturado').click(function(){
+    
+
+      jQuery('#modal4').modal('show');
+       var service = $(this).attr('id');
+
+        var dataString = 'id=' + service ;
+        var usuarioamodif;
+        var myArr;
+        $.ajax({
+            type: "POST",
+            url: "facturadobusqueda.php",
+            data: dataString
+         
+      })
+      .done(function(resultado) {
+      
+      localStorage.setItem("facturadoamodificar",resultado),
+      facturadoamodif=localStorage.getItem("facturadoamodificar"),  
+      myArr = JSON.parse(facturadoamodif) , 
+      document.getElementById("idamodificarfact").value =myArr.id,
+      document.getElementById("patentemodif").value =myArr.patente,
+      document.getElementById("colormodif").value =myArr.color,
+      document.getElementById("marcamodif").value =myArr.marca,
+      document.getElementById("horaingresomodif").value =myArr.horaingreso,
+      document.getElementById("fechaingresomodif").value =myArr.fechaingreso,
+      document.getElementById("horasalidamodif").value =myArr.horasalida,
+      document.getElementById("fechasalidamodif").value =myArr.fechasalida,
+      document.getElementById("tiempotranscurridomodif").value =myArr.tiempotranscurrido,
+      document.getElementById("importemodif").value =myArr.importe
+   
+      })
+      .fail(function(){
+
+        alert('Hubo un error')
+      })     
+
+
+});
+
+
+$("#editarfacturado-btn").click(function() {
+   
+
+    var id = $("input#idamodificarfact").val();
+    var patente = $("input#patentemodif").val();
+    var color = $("input#colormodif").val();
+    var marca = $("input#marcamodif").val();
+    var cochera = $("input#cocheramodif").val();
+    var horaingreso = $("input#horaingresomodif").val();
+    var fechaingreso = $("input#fechaingresomodif").val();
+    var horasalida = $("input#horasalidamodif").val();
+    var fechasalida = $("input#fechasalidamodif").val();
+    var tiempotranscurrido = $("input#tiempotranscurridomodif").val();
+     var importe = $("input#importemodif").val();
+
+  
+    var dataString ='id=' + id + '&patente=' + patente + '&color=' + color + '&marca=' + marca + '&horaingreso=' + horaingreso + '&fechaingreso=' + fechaingreso + '&horasalida=' + horasalida + '&fechasalida=' + fechasalida + '&tiempotranscurrido=' + tiempotranscurrido + '&importe=' + importe + '&cochera=' + cochera;;
+
+    $.ajax({
+      type: "POST",
+      url: "facturadoeditar.php",
+      data: dataString,
+      success: function(response) {
+            localStorage.setItem("facturado",response);
+
+          $('#formfacturado').html("<div id='message'></div>");
+            $('#message').html("<h2>Los datos han sido modificados correctamente!</h2>")
+            .hide()
+            .fadeIn(1500, function() {
+          window.location.reload(true);
+        
+            });
+        }
+    });
+    return false;
+  });
+
+ 
+
+$("#editar-btn").click(function() {
+    var logueos = localStorage.getItem("empleados");
+    arrayusuarios = JSON.parse(logueos);
+
+    var id = $("input#idamodif").val();
+  /*  var nombre = $("input#nombremodif").val();
+    var apellido = $("input#apellidomodif").val();
+    var correo = $("input#correomodif").val();
+    var clave = $("input#clavemodif").val();
+    var perfil = $("#perfilmodif").val();
+    var turno = $("#turnomodif").val();
+    var fechacreacion = $("#fechacreacionmodif").val();
+
+    */
+    var fotoanterior = $("#fotoanterior").val();
+  
+
+
+    var nombre = $("input#nombremodif").val();
+
+    //Validamos el campo nombre, simplemente miramos que no esté vacío
+    if (nombre == "") {
+      $("label#name_error").show();
+      $("input#nombremodif").focus();
+      return false;
+    }
+
+    //Obtenemos el valor del campo password
+    var apellido = $("input#apellidomodif").val();
+
+    //Validamos el campo password, simplemente miramos que no esté vacío
+    if (apellido == "") {
+      $("label#apell_error").show();
+      $("input#apellidomodif").focus();
+      return false;
+    }
+
+          //Obtenemos el valor del campo nombre
+    var correo = $("input#correomodif").val();
+
+    //Validamos el campo nombre, simplemente miramos que no esté vacío
+    if (correo == "") {
+      $("label#correo_error").show();
+      $("input#correomodif").focus();
+      return false;
+    }
+
+    //Obtenemos el valor del campo password
+    var clave = $("input#clavemodif").val();
+
+    //Validamos el campo password, simplemente miramos que no esté vacío
+    if (clave == "") {
+      $("label#clave_error").show();
+      $("input#clavemodif").focus();
+      return false;
+        }
+        
+          //Obtenemos el valor del campo nombre
+    var perfil = $("#perfilmodif").val();
+
+    //Validamos el campo nombre, simplemente miramos que no esté vacío
+    if (perfil == "") {
+      $("label#perfil_error").show();
+      $("#perfilmodif").focus();
+      return false;
+    }
+
+    //Obtenemos el valor del campo password
+    var turno = $("#turnomodif").val();
+
+    //Validamos el campo password, simplemente miramos que no esté vacío
+    if (turno == "") {
+      $("label#turno_error").show();
+      $("#turnomodif").focus();
+      return false;
+        }
+        
+
+          //Obtenemos el valor del campo nombre
+    var fechacreacion = $("#fechacreacionmodif").val();
+
+    //Validamos el campo nombre, simplemente miramos que no esté vacío
+    if (nombre == "") {
+      $("label#fecha_error").show();
+      $("#fechacreacionmodif").focus();
+      return false;
+    }
+
+    //Obtenemos el valor del campo password
+    var foto = $("#fotomodif");
+
+  
+var inputFileImage = document.getElementById("fotomodif");
+
+var file = inputFileImage.files[0];
+
+var data = new FormData();
+ data.append('id',id);
+ data.append('nombre',nombre);
+    data.append('apellido',apellido);
+    data.append('correo',correo);
+    data.append('clave',clave);
+    data.append('perfil',perfil);
+    data.append('turno',turno);
+    data.append('fechacreacion',fechacreacion);
+    data.append('fotoanterior',fotoanterior);
+    data.append('archivo',file);
+    console.log(data);
+  localStorage.setItem("edicion", data);
+
+    //Construimos la variable que se guardará en el data del Ajax para pasar al archivo php que procesará los datos
+   /* var dataString ='id=' + id + '&nombre=' + nombre + '&apellido=' + apellido + '&correo=' + correo + '&clave=' + clave + '&perfil=' + perfil + '&turno=' + turno + '&fechacreacion=' + fechacreacion + '&foto=' + foto;*/
+
+
+    $.ajax({
+      type: "POST",
+      url: "usuarioeditar.php",
+     cache: false,
+    contentType: false,
+    processData: false,
+      data: data,
+      success: function(response) {
+          localStorage.setItem("modificacion",response);
+          $('#edit_form').html("<div id='message'></div>");
+            $('#message').html("<h2>Tus datos han sido modificados correctamente!</h2>")
+            .hide()
+            .fadeIn(1500, function() {
+          window.location.reload(true);
+        
+            });
+        }
+    });
+    return false;
+  });
 
 
   $('.grillaestacionados').click(function(){
       document.getElementById("grilladeestacionados").className ="visible";
-    
+   
       document.getElementById("altaestacionado").className ="oculto";  
       document.getElementById("listaprecios").className ="oculto";  
       
@@ -202,7 +456,7 @@ $('#botonBusqueda').click(function(){
 
     $('.Listaprecios').click(function(){
       document.getElementById("grilladeestacionados").className ="oculto";
-
+  
       document.getElementById("altaestacionado").className ="oculto";  
       document.getElementById("listaprecios").className ="visible"; 
             
@@ -231,6 +485,9 @@ $('#botonBusqueda').click(function(){
       myArr = JSON.parse(estacionadoaretirar), 
       document.getElementById("idsalida").value =myArr.id,
       document.getElementById("patenteasalir").value =myArr.patente,
+      document.getElementById("colorasalir").value =myArr.color,
+      document.getElementById("marcaasalir").value =myArr.marca,
+      document.getElementById("cochera").value =myArr.cochera,
       document.getElementById("fechaingreso").value =myArr.fechaingreso,
       document.getElementById("horaingreso").value =myArr.horaingreso,
       document.getElementById("fechasalida").value =myArr.fechasalida,
@@ -249,21 +506,23 @@ $('#botonBusqueda').click(function(){
 });
 
 runOnLoad(function(){
-	$("input#nombre").select().focus();
-});
+  $("input#nombre").select().focus();
+});  
+
 
 });
 </script>
     </head>
 
-    <body>
-
+   <body onload=ObtenerDatos();>
+    <div class="esquina"><div class="sesion">Sesion abierta por... <div id="user" ></div></div>
         <nav class="navbar navbar-default navbar-fixed-top container-fluid" role="navigation">
             <div >
                 <div class="row">
                 <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header">
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                   
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                             <span class="sr-only">Toggle navigation</span>
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
@@ -282,29 +541,23 @@ runOnLoad(function(){
                             <li><a class="Listaprecios" href="#">Lista de precios</a></li>
             
                         </ul>
+                       
                     </div><!-- /.navbar-collapse -->
                 </div>
             </div><!-- /.container-fluid -->
+
+            
         </nav>
-<div class="container" id="busqueda">
-	<div class="row">
-        <div class="col-md-2">
-    		<h2>Buscar Estacionado</h2>
-            <div id="custom-search-input">
-                <div class="input-group col-md-12">
-                    <input type="text" name="search" id="search" class="form-control input-lg" placeholder="Buscar" />
-                    <span class="input-group-btn">
-                        <button id="botonBusqueda" class="btn btn-info btn-lg" type="button" >
-                            <i class="glyphicon glyphicon-search"></i>
-                        </button>
-                    </span>
-                </div>
-            </div>
-        </div>
-  </div>
-  
 
 
+
+        <div id="mensajes" class="oculto">
+        
+
+      
+      
+
+      </div>
         <div class="container">
 
         <div class="row vertical-offset-100">
@@ -316,16 +569,49 @@ runOnLoad(function(){
           <div class="panel panel-default">
         
             
-            
-            <form action="" method="post" >
-         
            <label class="panel-title">Ingrese Patente</label>
-            <input type="text" onkeydown="MostrarBoton(this)" name="patente" title="formato de patente: AAA 666" id="patente" required pattern="[a-z]{3}[0-9]{3}" />
-            <br>
-            <input type="button" id="botonIngreso" class="MiBotonUTN" value="ingreso"  name="estacionar" />
-            <br/>
+
             
-          </form>
+          <form  action="gestionEntrada.php" id="altaestacionado" method="post">
+          <input type="text" onkeydown="MostrarBoton(this)" name="patente" title="formato de patente: AAA 666" id="autocomplete" required pattern="[a-z]{3}[0-9]{3}" />
+          <br>
+           <label class="panel-title">Ingrese Color</label>
+           <input type="text" name="color" id="color" required="" />
+          <br>
+           <label class="panel-title">Ingrese Marca</label>
+           <input type="text"  name="marca" id="marca" required="" />
+          <br>
+
+           <label class="panel-title">Seleccione Cochera</label>
+          
+          <br>
+          <select name="cocheraseleccionada" id="cocheraseleccionada">
+   
+        <?php
+           
+          require './clases/AccesoDatos.php';
+          require './clases/vehiculo.php';
+          require './clases/Cochera.php';
+        
+                   
+        
+          $conn=mysqli_connect("mysql.hostinger.com.ar","u400470299_gise","123456","u400470299_estac") ;                                                 
+          $consulta="select * from cocheras where disponible='SI' ";
+          $resultado=mysqli_query($conn,$consulta);
+            while($lista=mysqli_fetch_array($resultado)){
+ 
+      ?> 
+        <option value="<? echo $lista['id']?>">  <? echo $lista['cochera']?></option> 
+    <? } ?>
+</select> 
+      
+
+                              
+          <input type="submit" id="botonIngreso" class="MiBotonUTN" value="ingreso"  name="estacionar" />
+          <br/>
+        
+     
+        </form>
 
 
             </div>
@@ -337,17 +623,13 @@ runOnLoad(function(){
 
  
       </div>
-                
+            
 
-           
-     
-     
-       
+             <div id="resp"></div>    
+    
          <div id="grilladeestacionados" class="oculto">
-
+            
          <div class="follow_container">
-
-  
              
                     <div id="contenido" >
                         
@@ -364,15 +646,18 @@ runOnLoad(function(){
                                 <th>#</th>
                                 <th>ID</th>
                                 <th>Patente</th>
+                                <th>Color</th>
+                                <th>Patente</th>
                                 <th>Fecha Ingreso</th>
                                 <th>Hora Ingreso</th>
+                                 <th>Cochera</th>
                                 
                                
                                  </thead>
                                     <tbody>
                                         <?php
-                                        require './clases/AccesoDatos.php';
-                                        require './clases/vehiculo.php';
+                                        //require './clases/AccesoDatos.php';
+                                        //require './clases/vehiculo.php';
                                         $pdo = AccesoDatos::connect();
                                        
                                         $sql = 'SELECT * FROM estacionados';
@@ -385,8 +670,11 @@ runOnLoad(function(){
                                             echo '<td>' . $row['id'] . '</td>';
                                          
                                             echo '<td>' . $row['patente'] . '</td>';
+                                             echo '<td>' . $row['color'] . '</td>';
+                                            echo '<td>' . $row['marca'] . '</td>';
                                             echo '<td>' . $row['fechaingreso'] . '</td>';
                                             echo '<td>' . $row['horaingreso'] . '</td>';
+                                                echo '<td>' . $row['cochera'] . '</td>';
                                            
                                         
                                 
@@ -439,13 +727,19 @@ runOnLoad(function(){
                                 <th>#</th>
                                 <th>ID</th>
                                 <th>Patente</th>
+                                   <th>Color</th>
+
+                                   <th>Marca</th>
+
                                 <th>Fecha Ingreso</th>
                                 <th>Hora Ingreso</th>
                                 <th>Fecha Salida</th>
                                 <th>Hora Salida</th>
                                 <th>Tiempo Transcurrido</th>
-                                <th>Importe $</th>
-         
+                              
+                                <th>Cochera</th>
+                                  <th>Importe $</th>
+                             
                                  </thead>
                                     <tbody>
                                         <?php
@@ -463,11 +757,14 @@ runOnLoad(function(){
                                             echo '<td>' . $row['id'] . '</td>';
                                          
                                             echo '<td>' . $row['patente'] . '</td>';
+                                             echo '<td>' . $row['color'] . '</td>';
+                                              echo '<td>' . $row['marca'] . '</td>';
                                             echo '<td>' . $row['fechaingreso'] . '</td>';
                                             echo '<td>' . $row['horaingreso'] . '</td>';
                                             echo '<td>' . $row['fechasalida'] . '</td>';
                                             echo '<td>' . $row['horasalida'] . '</td>';
                                             echo '<td>' . $row['tiempotranscurrido'] . '</td>';
+                                            echo '<td>' . $row['cochera'] . '</td>';
                                             echo '<td>' . $row['importe'] . '</td>';
                                         
                                 
@@ -475,7 +772,7 @@ runOnLoad(function(){
                                             $id=$row['id'];
                                             $stringdatos=$unAuto->mostrarDatos();
                                             
-                                        
+                                          
                                             $con++;
                                         }
                                     
@@ -495,10 +792,18 @@ runOnLoad(function(){
             </div>
               
                  
-</div>
-               
 
-              
+
+</div>
+
+
+
+
+                   
+      
+
+           
+                
               
 
  
@@ -511,15 +816,16 @@ runOnLoad(function(){
         <h2>Lista de Precios</h2>
         <ul class="list-group">
         
-          <li class="list-group-item">Precio por hora: $70</li>
-          <li class="list-group-item">Precio por dia:  $590</li>
+          <li class="list-group-item">Precio por hora: $10</li>
+           <li class="list-group-item">Precio por media estadia:  $90</li>
+          <li class="list-group-item">Precio por estadia completa:  $170</li>
+          
          </ul>
       </div>
 
       </div>
 
  
-    
                 
     
 
@@ -541,6 +847,18 @@ runOnLoad(function(){
                               <div class="form-group">
                               <label>Patente</label>
                                 <input name="patente" id="patenteasalir" value="" class="form-control" >
+                               
+                              </div>
+
+                                   <div class="form-group">
+                              <label>Color</label>
+                                <input name="color" id="colorasalir" value="" class="form-control" >
+                               
+                              </div>
+
+                                   <div class="form-group">
+                              <label>Marca</label>
+                                <input name="marca" id="marcaasalir" value="" class="form-control" >
                                
                               </div>
                
@@ -569,12 +887,17 @@ runOnLoad(function(){
                               </div>
                               <div class="form-group">
                                 <label>Tiempo Transcurrido</label>
-                                <input name="tiempotranscurrido"  id="tiempotranscurrido" value=""class="form-control" >
+                                <input name="tiempotranscurrido"  id="tiempotranscurrido" value="" class="form-control" >
+                                
+                              </div>
+                                <div class="form-group">
+                                <label>Cochera</label>
+                                <input name="cochera"  id="cochera" value="" class="form-control">
                                 
                               </div>
                               <div class="form-group">
                                 <label>Importe  $$ </label>
-                                <input name="importe"  id="importe" value=""class="form-control" >
+                                <input name="importe"  id="importe" value="" class="form-control" >
                                 
                               </div>
                               </fieldset>
@@ -602,7 +925,99 @@ runOnLoad(function(){
         </div>
          
           
-    
+        <div class="modal fade" id="modal4" tabindex="-1" role="dialog" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">Modificar Facturado</h4>
+                          </div>
+                          <div id="edit_form">
+                          <form role="form" name="register" id="formfacturado" method="post" action="" >
+                            <div class="col-lg-12">
+                            
+                               
+                                <input name="id" id="idamodificarfact" value="" class="form-control" style="visibility:hidden" >
+                            
+                              <div class="form-group">
+                              <label>Patente</label>
+                                <input name="patente" id="patentemodif" value="" class="form-control" >
+                                <label class="error" for="patente" id="name_error">Debe introducir patente.</label><br><br>
+                              </div>
+
+                                <div class="form-group">
+                              <label>Color</label>
+                                <input name="color" id="colormodif" value="" class="form-control" >
+                                <label class="error" for="color" id="name_error">Debe introducir color de vehiculo.</label><br><br>
+                              </div>
+
+                                <div class="form-group">
+                              <label>Marca</label>
+                                <input name="marca" id="marcamodif" value="" class="form-control" >
+                                <label class="error" for="marca" id="name_error">Debe introducir marca de vehiculo.</label><br><br>
+                              </div>
+                                  </div>
+                                <div class="form-group">
+                                <label>Cochera</label>
+                                <input name="cochera"  id="cocheramodif" value="" class="form-control">
+                              <div class="form-group">
+                                <label>Hora de ingreso</label>
+                                <input name="horaingreso" id="horaingresomodif" value="" class="form-control" >
+                                <label class="error" for="horaingreso" id="horaingreso_error">Debe introducir hora de ingreso.</label><br><br>
+                              </div>
+              
+                              <div class="form-group">
+                                <label>Fecha de  Ingreso</label>
+                                <input name="fechaingreso" id="fechaingresomodif"value="" class="form-control">
+                                <label class="error" for="fechaingreso" id="fechaingreso_error">Debe introducir fecha de ingreso.</label><br><br>
+                              </div>
+              
+                              <div class="form-group">
+                                <label>Hora Salida</label>
+                                <input name="horasalida"  id="horasalidamodif" value="" class="form-control">
+                                <label class="error" for="horasalida" id="horasalida_error">Debe introducir hora salida.</label><br><br>
+                              </div>
+                             
+                              <div class="form-group">
+                                <label>Fecha Salida</label>
+                                <input name="fechasalida" id="fechasalidamodif"  value="" class="form-control" >
+                                <label class="error" for="fechasalida" id="salida_error">Debe introducir su fecha de salida</label><br><br>
+                              </div>
+              
+                              <div class="form-group">
+                                <label>Tiempo Transcurrido</label>
+                                <input name="tiempotranscurrido"  id="tiempotranscurridomodif" value=""class="form-control" >
+                                <label class="error" for="tiempotranscurrido" id="tiempo_error">Debe introducir tiempo transcurrido</label><br><br>
+                              </div>
+              
+              
+                              <div class="form-group">
+                                <label>Importe</label>
+                                <input name="importe" id="importemodif" value="" class="form-control" >
+                                <label class="error" for="importe" id="importe_error">Debe introducir importe.</label><br><br>
+                              </div>
+              
+              
+              
+                              <button type="submit"   class="btn btn-info btn-lg" id="editarfacturado-btn" >
+                                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Modificar
+                              </button>
+              
+                            </div>
+                          </form>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-danger btn-circle" data-dismiss="modal"><i class="fa fa-times"></i>x</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
 
 
     

@@ -24,7 +24,9 @@ namespace personas{
         this.perfil = perfil;
         this.turno = turno;
         this.fechacreacion = fechacreacion;
-        this.foto = foto;
+         this.foto = foto;
+       
+       
     }
      
         

@@ -5,6 +5,8 @@
         <meta charset="UTF-8">
         <title>Estacionamiento Administracion</title>
         <link href="./node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+         
+
         <link href="css/fondoAdmin.css" rel="stylesheet">
         <link href="css/estilo.css" rel="stylesheet">
         <link href="css/style.css" rel="stylesheet">
@@ -16,6 +18,7 @@
            
            <script src="./node_modules\jquery\dist/jquery.min.js"></script>
            <script src="./js/ajax.js"></script>
+         
            <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
            <link rel="stylesheet" type="text/css" href="css/jquery-ui-1.8.6.css" />
 <style>
@@ -33,12 +36,22 @@
 <script type="text/javascript" src="./js/jquery-ui-1.8.6.min.js"></script>
 
 <script src="./js/runonload.js"></script>
-       
-
+    <script src="./js/jquery.validate.js"></script>    
+     <script src="./js/jquery.validate.min.js"></script>    
+  <script src="./js/validador.js"></script>
 
 <script type="text/javascript">
 
+function ObtenerDatos()
+{
+   var email= localStorage.getItem("useractual"); 
 
+
+   
+  document.getElementById("user").innerHTML +="<h3>"+email+"</h3>";
+  
+
+}
 
 function Modal()
 {
@@ -57,23 +70,26 @@ $(document).ready(function() {
         
     });  
 
+
+
 	$("#enviar-btn").click(function() {
-    var logueos = localStorage.getItem("empleados");
+   var logueos = localStorage.getItem("empleados");
     arrayusuarios = JSON.parse(logueos);
 		//Obtenemos el valor del campo nombre
     var nombre = $("input#nombre").val();
     var apellido = $("input#apellido").val();
-    var correo = $("input#correo").val();
+    var correo = $("#correo").val();
     var clave = $("input#clave").val();
-		var perfil = $("input#perfil").val();
-   	var turno = $("input#turno").val();
-	var fechacreacion = $("input#fechacreacion").val();
+		var perfil = $("#perfil").val();
+   	var turno = $("#turno").val();
+	  var fechacreacion = $("input#fechacreacion").val();
+    var foto = $("#foto");
 
-		var foto = $("input#foto").val();
   
     var tipo = "emp";
-    var empleado = new personas.Empleado(tipo,nombre,apellido,correo,clave,perfil,turno,fechacreacion,foto);
-    console.log(empleado);
+    var id = 0;
+    var empleado = new personas.Empleado(tipo,id,nombre,apellido,correo,clave,perfil,turno,fechacreacion,foto);
+    
     if (arrayusuarios === null) {
         arrayusuarios = new Array();
         arrayusuarios.push(empleado);
@@ -81,9 +97,9 @@ $(document).ready(function() {
     else {
         arrayusuarios.push(empleado);
     }
-    localStorage.setItem("empleados", JSON.stringify(arrayusuarios));
-
-
+    localStorage.setItem("empleado", JSON.stringify(arrayusuarios));
+ 
+   
 		var nombre = $("input#nombre").val();
 
 		//Validamos el campo nombre, simplemente miramos que no esté vacío
@@ -104,12 +120,12 @@ $(document).ready(function() {
 		}
 
         	//Obtenemos el valor del campo nombre
-		var correo = $("input#correo").val();
+		var correo = $("#correo").val();
 
 		//Validamos el campo nombre, simplemente miramos que no esté vacío
 		if (correo == "") {
 			$("label#correo_error").show();
-			$("input#correo").focus();
+			$("#correo").focus();
 			return false;
 		}
 
@@ -124,64 +140,113 @@ $(document).ready(function() {
         }
         
         	//Obtenemos el valor del campo nombre
-		var perfil = $("input#perfil").val();
+		var perfil = $("#perfil").val();
 
 		//Validamos el campo nombre, simplemente miramos que no esté vacío
 		if (perfil == "") {
 			$("label#perfil_error").show();
-			$("input#perfil").focus();
+			$("#perfil").focus();
 			return false;
 		}
 
 		//Obtenemos el valor del campo password
-		var turno = $("input#turno").val();
+		var turno = $("#turno").val();
 
 		//Validamos el campo password, simplemente miramos que no esté vacío
 		if (turno == "") {
 			$("label#turno_error").show();
-			$("input#turno").focus();
+			$("#turno").focus();
 			return false;
         }
         
 
         	//Obtenemos el valor del campo nombre
-		var fechacreacion = $("input#fechacreacion").val();
+		var fechacreacion = $("#fechacreacion").val();
 
 		//Validamos el campo nombre, simplemente miramos que no esté vacío
 		if (nombre == "") {
 			$("label#fecha_error").show();
-			$("input#fechacreacion").focus();
+			$("#fechacreacion").focus();
 			return false;
 		}
 
-		//Obtenemos el valor del campo password
-		var foto = $("input#foto").val();
+    
+   //var formData = new FormData($(".formulario")[0]);
 
-		//Validamos el campo password, simplemente miramos que no esté vacío
-		if (foto == "") {
-			$("label#foto_error").show();
-            $("input#foto").focus();
-			return false;
-		}
+   
+   
+
+
+
+
 		//Construimos la variable que se guardará en el data del Ajax para pasar al archivo php que procesará los datos
-		var dataString = 'nombre=' + nombre + '&apellido=' + apellido + '&correo=' + correo + '&clave=' + clave + '&perfil=' + perfil + '&turno=' + turno + '&fechacreacion=' + fechacreacion + '&foto=' + foto;
+		/*var dataString = 'nombre=' + nombre + '&apellido=' + apellido + '&correo=' + correo + '&clave=' + clave + '&perfil=' + perfil + '&turno=' + turno + '&fechacreacion=' + fechacreacion+ '&foto=' + foto;
 
-		$.ajax({
-			type: "POST",
-			url: "usuarioalta.php",
-			data: dataString,
-			success: function() {
-		    	$('#register_form').html("<div id='message'></div>");
-		        $('#message').html("<h2>Tus datos han sido guardados correctamente!</h2>")
-		        .hide()
-		        .fadeIn(1500, function() {
-					window.location.reload(true);
-		        });
-		    }
-		});
-		return false;
-  });
+    */
+    /*
+    console.log(formData);
+
+          $.ajax({
+      
+        url:   'usuarioalta.php',
+      
+     
+           data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            type: 'POST',
+
+        success: function(response) {
+        
+                $('#register_form').html("<div id='message'></div>");
+                $('#message').html("<h2>Se ha registrado correctamente!</h2>")
+                .hide()
+                .fadeIn(1500, function() {
+              window.location.reload(true);
+             
+                });
+            }
+             
+            
+    });*/
+
+
+var inputFileImage = document.getElementById("foto");
+
+var file = inputFileImage.files[0];
+
+var data = new FormData();
+ data.append('nombre',nombre);
+    data.append('apellido',apellido);
+    data.append('correo',correo);
+    data.append('clave',clave);
+    data.append('perfil',perfil);
+    data.append('turno',turno);
+    data.append('fechacreacion',fechacreacion);
+    data.append('archivo',file);
+
+
+$.ajax({
+    url: 'usuarioalta.php',
+    data: data,
+    cache: false,
+    contentType: false,
+    processData: false,
+    type: 'POST',
+   success: function(response) {
+                  localStorage.setItem("alta",response);
+                $('#register_form').html("<div id='message'></div>");
+                $('#message').html("<h2>Se ha registrado correctamente!</h2>")
+                .hide()
+                .fadeIn(1500, function() {
+              window.location.reload(true);
+             
+                });
+            }
   
+   });  
+ });  
   $('.delete').click(function(){
     
 
@@ -195,7 +260,7 @@ $(document).ready(function() {
             url: "usuariobaja.php",
             data: dataString,
          
-          	success: function() {
+            success: function() {
               $('#empleados_form').html("<div id='message'></div>");
                 $('#message').html("<h2>Se ha eliminado correctamente!</h2>")
                 .hide()
@@ -223,7 +288,7 @@ $(document).ready(function() {
             url: "facturadobaja.php",
             data: dataString,
          
-          	success: function() {
+            success: function() {
               $('#empleados_form').html("<div id='message'></div>");
                 $('#message').html("<h2>Se ha eliminado correctamente!</h2>")
                 .hide()
@@ -247,17 +312,14 @@ $(document).ready(function() {
        var horasalida = document.getElementById("horasalida").value;
        var tiempotranscurrido = document.getElementById("tiempotranscurrido").value;
        var importe = document.getElementById("importe").value;
-        var dataString = 'id=' + id + '&fechasalida=' + fechasalida + '&horasalida=' + horasalida + '&tiempotranscurrido=' + tiempotranscurrido + '&importe=' + importe;
-;
-  
-        $.ajax({
+       var cochera = document.getElementById("cochera").value;
+       var dataString='id='+id+'&fechasalida='+fechasalida+'&horasalida='+horasalida+ '&tiempotranscurrido='+tiempotranscurrido+'&cochera='+cochera+'&importe='+importe;
+       $.ajax({
             type: "POST",
             url: "estacionadobaja.php",
             data: dataString,
          
-      })
-
-        .done(function(resultado) {
+      }).done(function(resultado) {
       
       localStorage.setItem("fact",resultado),
       $('#modal3').html("<div id='message'></div>");
@@ -266,8 +328,7 @@ $(document).ready(function() {
               .fadeIn(1500, function() {
                
             window.location.reload(true);
-      })
-      .fail(function(){
+      }).fail(function(){
         alert(resultado);
         alert('Error al eliminar auto.')
         
@@ -279,37 +340,7 @@ $(document).ready(function() {
    
     });
     
-    
-    $('#botonIngreso').click(function(){
-    
-      var service =  document.getElementById("patente").value;
-       var dataString = 'patente=' + service ;
-     
-        $.ajax({
-            type: "POST",
-            url: "gestionEntrada.php",
-            data: dataString
-         
-      })
-      .done(function(resultado) {
-      
 
-      $('#altaestacionado').html("<div id='message'></div>");
-              $('#message').html("<h2>Se ha agregado correctamente!</h2>")
-              .hide()
-              .fadeIn(1500, function() {
-               
-            window.location.reload(true);
-      })
-      .fail(function(){
-        alert('Error al ingresar auto.')
-        
-      })     
-
-
-})
-   
-});   
     
     
     $('.grillaempleados').click(function(){
@@ -367,7 +398,9 @@ $(document).ready(function() {
       document.getElementById("perfilmodif").value =myArr.perfil,
       document.getElementById("turnomodif").value =myArr.turno,
       document.getElementById("fechacreacionmodif").value =myArr.fechacreacion,
-      document.getElementById("fotomodif").value =myArr.foto
+    document.getElementById("fotoanterior").value=myArr.foto,
+ 
+       document.getElementById("imagenamodificar").src = 'fotosEmpleados/'+myArr.foto
       })
       .fail(function(){
 
@@ -377,6 +410,38 @@ $(document).ready(function() {
 
 });
 
+
+$('.busquedaform').click(function(){
+    
+
+   
+       var service = $(this).attr('buscar');
+
+        var dataString = 'buscar=' + service ;
+     
+        var myArr;
+        $.ajax({
+            type: "POST",
+            url: "Busqueda.php",
+            data: dataString
+         
+      })
+      .done(function(resultado) {
+        document.getElementById("busqueda").className =visible,
+          document.getElementById("empleados_form").className =oculto,
+  
+      localStorage.setItem("patentes",resultado),
+      patentes=localStorage.getItem("patentes"),  
+      myArr = JSON.parse(patentes) 
+     
+      })
+      .fail(function(){
+
+        alert('Hubo un error')
+      })     
+
+
+});
 
 $('.editfacturado').click(function(){
     
@@ -400,6 +465,8 @@ $('.editfacturado').click(function(){
       myArr = JSON.parse(facturadoamodif) , 
       document.getElementById("idamodificarfact").value =myArr.id,
       document.getElementById("patentemodif").value =myArr.patente,
+      document.getElementById("colormodif").value =myArr.color,
+      document.getElementById("marcamodif").value =myArr.marca,
       document.getElementById("horaingresomodif").value =myArr.horaingreso,
       document.getElementById("fechaingresomodif").value =myArr.fechaingreso,
       document.getElementById("horasalidamodif").value =myArr.horasalida,
@@ -422,31 +489,36 @@ $("#editarfacturado-btn").click(function() {
 
     var id = $("input#idamodificarfact").val();
     var patente = $("input#patentemodif").val();
+    var color = $("input#colormodif").val();
+    var marca = $("input#marcamodif").val();
+    var cochera = $("input#cocheramodif").val();
     var horaingreso = $("input#horaingresomodif").val();
     var fechaingreso = $("input#fechaingresomodif").val();
     var horasalida = $("input#horasalidamodif").val();
-		var fechasalida = $("input#fechasalidamodif").val();
-   	var tiempotranscurrido = $("input#tiempotranscurridomodif").val();
-	var importe = $("input#importemodif").val();
+    var fechasalida = $("input#fechasalidamodif").val();
+    var tiempotranscurrido = $("input#tiempotranscurridomodif").val();
+     var importe = $("input#importemodif").val();
 
   
-		var dataString ='id=' + id + '&patente=' + patente + '&horaingreso=' + horaingreso + '&fechaingreso=' + fechaingreso + '&horasalida=' + horasalida + '&fechasalida=' + fechasalida + '&tiempotranscurrido=' + tiempotranscurrido + '&importe=' + importe;
- alert(dataString);
-		$.ajax({
-			type: "POST",
-			url: "facturadoeditar.php",
-			data: dataString,
-			success: function() {
-		    	$('#edit_form').html("<div id='message'></div>");
-		        $('#message').html("<h2>Los datos han sido modificados correctamente!</h2>")
-		        .hide()
-		        .fadeIn(1500, function() {
-					window.location.reload(true);
+    var dataString ='id=' + id + '&patente=' + patente + '&color=' + color + '&marca=' + marca + '&horaingreso=' + horaingreso + '&fechaingreso=' + fechaingreso + '&horasalida=' + horasalida + '&fechasalida=' + fechasalida + '&tiempotranscurrido=' + tiempotranscurrido + '&importe=' + importe + '&cochera=' + cochera;;
+
+    $.ajax({
+      type: "POST",
+      url: "facturadoeditar.php",
+      data: dataString,
+      success: function(response) {
+            localStorage.setItem("facturado",response);
+
+          $('#formfacturado').html("<div id='message'></div>");
+            $('#message').html("<h2>Los datos han sido modificados correctamente!</h2>")
+            .hide()
+            .fadeIn(1500, function() {
+          window.location.reload(true);
         
-		        });
-		    }
-		});
-		return false;
+            });
+        }
+    });
+    return false;
   });
 
  
@@ -456,126 +528,134 @@ $("#editar-btn").click(function() {
     arrayusuarios = JSON.parse(logueos);
 
     var id = $("input#idamodif").val();
-    var nombre = $("input#nombremodif").val();
+  /*  var nombre = $("input#nombremodif").val();
     var apellido = $("input#apellidomodif").val();
     var correo = $("input#correomodif").val();
     var clave = $("input#clavemodif").val();
-		var perfil = $("input#perfilmodif").val();
-   	var turno = $("input#turnomodif").val();
-	var fechacreacion = $("input#fechacreacionmodif").val();
+    var perfil = $("#perfilmodif").val();
+    var turno = $("#turnomodif").val();
+    var fechacreacion = $("#fechacreacionmodif").val();
 
-		var foto = $("input#fotomodif").val();
+    */
+    var fotoanterior = $("#fotoanterior").val();
   
-    var tipo = "emp";
-    var empleado = new personas.Empleado(tipo,nombre,apellido,correo,clave,perfil,turno,fechacreacion,foto);
-    console.log(empleado);
-    if (arrayusuarios === null) {
-        arrayusuarios = new Array();
-        arrayusuarios.push(empleado);
+
+
+    var nombre = $("input#nombremodif").val();
+
+    //Validamos el campo nombre, simplemente miramos que no esté vacío
+    if (nombre == "") {
+      $("label#name_error").show();
+      $("input#nombremodif").focus();
+      return false;
     }
-    else {
-        arrayusuarios.push(empleado);
+
+    //Obtenemos el valor del campo password
+    var apellido = $("input#apellidomodif").val();
+
+    //Validamos el campo password, simplemente miramos que no esté vacío
+    if (apellido == "") {
+      $("label#apell_error").show();
+      $("input#apellidomodif").focus();
+      return false;
     }
-    localStorage.setItem("empleados", JSON.stringify(arrayusuarios));
 
+          //Obtenemos el valor del campo nombre
+    var correo = $("input#correomodif").val();
 
-		var nombre = $("input#nombremodif").val();
+    //Validamos el campo nombre, simplemente miramos que no esté vacío
+    if (correo == "") {
+      $("label#correo_error").show();
+      $("input#correomodif").focus();
+      return false;
+    }
 
-		//Validamos el campo nombre, simplemente miramos que no esté vacío
-		if (nombre == "") {
-			$("label#name_error").show();
-			$("input#nombremodif").focus();
-			return false;
-		}
+    //Obtenemos el valor del campo password
+    var clave = $("input#clavemodif").val();
 
-		//Obtenemos el valor del campo password
-		var apellido = $("input#apellidomodif").val();
-
-		//Validamos el campo password, simplemente miramos que no esté vacío
-		if (apellido == "") {
-			$("label#apell_error").show();
-			$("input#apellidomodif").focus();
-			return false;
-		}
-
-        	//Obtenemos el valor del campo nombre
-		var correo = $("input#correomodif").val();
-
-		//Validamos el campo nombre, simplemente miramos que no esté vacío
-		if (correo == "") {
-			$("label#correo_error").show();
-			$("input#correomodif").focus();
-			return false;
-		}
-
-		//Obtenemos el valor del campo password
-		var clave = $("input#clavemodif").val();
-
-		//Validamos el campo password, simplemente miramos que no esté vacío
-		if (clave == "") {
-			$("label#clave_error").show();
-			$("input#clavemodif").focus();
-			return false;
+    //Validamos el campo password, simplemente miramos que no esté vacío
+    if (clave == "") {
+      $("label#clave_error").show();
+      $("input#clavemodif").focus();
+      return false;
         }
         
-        	//Obtenemos el valor del campo nombre
-		var perfil = $("input#perfilmodif").val();
+          //Obtenemos el valor del campo nombre
+    var perfil = $("#perfilmodif").val();
 
-		//Validamos el campo nombre, simplemente miramos que no esté vacío
-		if (perfil == "") {
-			$("label#perfil_error").show();
-			$("input#perfilmodif").focus();
-			return false;
-		}
+    //Validamos el campo nombre, simplemente miramos que no esté vacío
+    if (perfil == "") {
+      $("label#perfil_error").show();
+      $("#perfilmodif").focus();
+      return false;
+    }
 
-		//Obtenemos el valor del campo password
-		var turno = $("input#turnomodif").val();
+    //Obtenemos el valor del campo password
+    var turno = $("#turnomodif").val();
 
-		//Validamos el campo password, simplemente miramos que no esté vacío
-		if (turno == "") {
-			$("label#turno_error").show();
-			$("input#turnomodif").focus();
-			return false;
+    //Validamos el campo password, simplemente miramos que no esté vacío
+    if (turno == "") {
+      $("label#turno_error").show();
+      $("#turnomodif").focus();
+      return false;
         }
         
 
-        	//Obtenemos el valor del campo nombre
-		var fechacreacion = $("input#fechacreacionmodif").val();
+          //Obtenemos el valor del campo nombre
+    var fechacreacion = $("#fechacreacionmodif").val();
 
-		//Validamos el campo nombre, simplemente miramos que no esté vacío
-		if (nombre == "") {
-			$("label#fecha_error").show();
-			$("input#fechacreacionmodif").focus();
-			return false;
-		}
+    //Validamos el campo nombre, simplemente miramos que no esté vacío
+    if (nombre == "") {
+      $("label#fecha_error").show();
+      $("#fechacreacionmodif").focus();
+      return false;
+    }
 
-		//Obtenemos el valor del campo password
-		var foto = $("input#fotomodif").val();
+    //Obtenemos el valor del campo password
+    var foto = $("#fotomodif");
 
-		//Validamos el campo password, simplemente miramos que no esté vacío
-		if (foto == "") {
-			$("label#foto_error").show();
-            $("input#fotomodif").focus();
-			return false;
-		}
-		//Construimos la variable que se guardará en el data del Ajax para pasar al archivo php que procesará los datos
-		var dataString ='id=' + id + '&nombre=' + nombre + '&apellido=' + apellido + '&correo=' + correo + '&clave=' + clave + '&perfil=' + perfil + '&turno=' + turno + '&fechacreacion=' + fechacreacion + '&foto=' + foto;
+  
+var inputFileImage = document.getElementById("fotomodif");
 
-		$.ajax({
-			type: "POST",
-			url: "usuarioeditar.php",
-			data: dataString,
-			success: function() {
-		    	$('#edit_form').html("<div id='message'></div>");
-		        $('#message').html("<h2>Tus datos han sido modificados correctamente!</h2>")
-		        .hide()
-		        .fadeIn(1500, function() {
-					window.location.reload(true);
+var file = inputFileImage.files[0];
+
+var data = new FormData();
+ data.append('id',id);
+ data.append('nombre',nombre);
+    data.append('apellido',apellido);
+    data.append('correo',correo);
+    data.append('clave',clave);
+    data.append('perfil',perfil);
+    data.append('turno',turno);
+    data.append('fechacreacion',fechacreacion);
+    data.append('fotoanterior',fotoanterior);
+    data.append('archivo',file);
+    console.log(data);
+  localStorage.setItem("edicion", data);
+
+    //Construimos la variable que se guardará en el data del Ajax para pasar al archivo php que procesará los datos
+   /* var dataString ='id=' + id + '&nombre=' + nombre + '&apellido=' + apellido + '&correo=' + correo + '&clave=' + clave + '&perfil=' + perfil + '&turno=' + turno + '&fechacreacion=' + fechacreacion + '&foto=' + foto;*/
+
+
+    $.ajax({
+      type: "POST",
+      url: "usuarioeditar.php",
+     cache: false,
+    contentType: false,
+    processData: false,
+      data: data,
+      success: function(response) {
+          localStorage.setItem("modificacion",response);
+          $('#edit_form').html("<div id='message'></div>");
+            $('#message').html("<h2>Tus datos han sido modificados correctamente!</h2>")
+            .hide()
+            .fadeIn(1500, function() {
+          window.location.reload(true);
         
-		        });
-		    }
-		});
-		return false;
+            });
+        }
+    });
+    return false;
   });
 
 
@@ -620,6 +700,9 @@ $("#editar-btn").click(function() {
       myArr = JSON.parse(estacionadoaretirar), 
       document.getElementById("idsalida").value =myArr.id,
       document.getElementById("patenteasalir").value =myArr.patente,
+      document.getElementById("colorasalir").value =myArr.color,
+      document.getElementById("marcaasalir").value =myArr.marca,
+      document.getElementById("cochera").value =myArr.cochera,
       document.getElementById("fechaingreso").value =myArr.fechaingreso,
       document.getElementById("horaingreso").value =myArr.horaingreso,
       document.getElementById("fechasalida").value =myArr.fechasalida,
@@ -638,21 +721,23 @@ $("#editar-btn").click(function() {
 });
 
 runOnLoad(function(){
-	$("input#nombre").select().focus();
-});
+  $("input#nombre").select().focus();
+});  
+
 
 });
 </script>
     </head>
 
-    <body>
-
+   <body onload=ObtenerDatos();>
+    <div class="esquina"><div class="sesion">Sesion abierta por... <div id="user" ></div></div>
         <nav class="navbar navbar-default navbar-fixed-top container-fluid" role="navigation">
             <div >
                 <div class="row">
                 <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header">
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                   
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                             <span class="sr-only">Toggle navigation</span>
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
@@ -671,11 +756,23 @@ runOnLoad(function(){
                             <li><a class="Listaprecios" href="#">Lista de precios</a></li>
             
                         </ul>
+                       
                     </div><!-- /.navbar-collapse -->
                 </div>
             </div><!-- /.container-fluid -->
+
+            
         </nav>
 
+
+
+        <div id="mensajes" class="oculto">
+        
+
+      
+      
+
+      </div>
         <div class="container">
 
         <div class="row vertical-offset-100">
@@ -687,16 +784,47 @@ runOnLoad(function(){
           <div class="panel panel-default">
         
             
-            
-            <form action="" method="post" >
-         
            <label class="panel-title">Ingrese Patente</label>
-            <input type="text" onkeydown="MostrarBoton(this)" name="patente" title="formato de patente: AAA 666" id="patente" required pattern="[a-z]{3}[0-9]{3}" />
-            <br>
-            <input type="button" id="botonIngreso" class="MiBotonUTN" value="ingreso"  name="estacionar" />
-            <br/>
+
             
-          </form>
+          <form  action="gestionEntrada1.php" id="altaestacionado" method="post">
+          <input type="text" onkeydown="MostrarBoton(this)" name="patente" title="formato de patente: AAA 666" id="autocomplete" required pattern="[a-z]{3}[0-9]{3}" />
+          <br>
+           <label class="panel-title">Ingrese Color</label>
+           <input type="text" name="color" id="color" required="" />
+          <br>
+           <label class="panel-title">Ingrese Marca</label>
+           <input type="text"  name="marca" id="marca" required="" />
+          <br>
+
+           <label class="panel-title">Seleccione Cochera</label>
+          
+          <br>
+          <select name="cocheraseleccionada" id="cocheraseleccionada">
+   
+        <?php
+           
+          require './clases/AccesoDatos.php';
+          require './clases/vehiculo.php';
+          require './clases/Cochera.php';
+        
+             $conn=mysqli_connect("mysql.hostinger.com.ar","u400470299_gise","123456","u400470299_estac") ;                          
+          $consulta="select * from cocheras where disponible='SI' ";
+          $resultado=mysqli_query($conn,$consulta);
+            while($lista=mysqli_fetch_array($resultado)){
+ 
+      ?> 
+        <option value="<? echo $lista['id']?>">  <? echo $lista['cochera']?></option> 
+    <? } ?>
+</select> 
+      
+
+                              
+          <input type="submit" id="botonIngreso" class="MiBotonUTN" value="ingreso"  name="estacionar" />
+          <br/>
+        
+     
+        </form>
 
 
             </div>
@@ -708,7 +836,9 @@ runOnLoad(function(){
 
  
       </div>
-                
+            
+
+             <div id="resp"></div>    
       <div id="grilladeempleados" class="oculto">
             <div class="follow_container">
              
@@ -739,7 +869,7 @@ runOnLoad(function(){
                                     </thead>
                                     <tbody>
                                         <?php
-                                        require './clases/AccesoDatos.php';
+                                        //require './clases/AccesoDatos.php';
                                         require './clases/Empleado.php';
                                         $pdo = AccesoDatos::connect();
                                        
@@ -759,7 +889,9 @@ runOnLoad(function(){
                                             echo '<td>' . $row['turno'] . '</td>';
                                             echo '<td>' . $row['perfil'] . '</td>';
                                             echo '<td>' . $row['fechacreacion'] . '</td>';
-                                            echo '<td>' . $row['foto'] . '</td>';
+                                             echo '
+                                            <td><img src="./fotosEmpleados/'. $row['foto'] .'"  width="50" height="50" /></td>';
+                                          
                                             $unempleado = Empleado::TraerUnEmpleado($row['id']);
                                             $id=$row['id'];
                                             $stringdatos=$unempleado->mostrarDatos();
@@ -799,24 +931,32 @@ runOnLoad(function(){
                        
                         <div class="panel panel-primary">
                             <div class="panel-heading">
-                                <h3 class="panel-title">Lista de Estacionados</h3>
-                            </div>
-                            <div id="empleados_form">
-                            <div class="panel-body">
-                                <table class="table table-striped">
+                                <h3 class="panel-title">Lista de Estacionados</h3><h5>Buscar por patente</h5>
+
+
+    <form class="busquedaform" name="buscador" method="post" action="busqueda.php"> 
+    <input id="buscar" name="buscar" type="search" autofocus >
+    <input type="submit" name="buscador" value="buscar">
+
+      <div id="busqueda" class="oculto">
+
+        <table class="table table-striped">
                                 <thead>
                                 <th>#</th>
                                 <th>ID</th>
                                 <th>Patente</th>
+                                <th>Color</th>
+                                <th>Patente</th>
                                 <th>Fecha Ingreso</th>
                                 <th>Hora Ingreso</th>
+                                 <th>Cochera</th>
                                 
                                
                                  </thead>
                                     <tbody>
                                         <?php
                                         //require './clases/AccesoDatos.php';
-                                        require './clases/vehiculo.php';
+                                        //require './clases/vehiculo.php';
                                         $pdo = AccesoDatos::connect();
                                        
                                         $sql = 'SELECT * FROM estacionados';
@@ -829,8 +969,77 @@ runOnLoad(function(){
                                             echo '<td>' . $row['id'] . '</td>';
                                          
                                             echo '<td>' . $row['patente'] . '</td>';
+                                             echo '<td>' . $row['color'] . '</td>';
+                                            echo '<td>' . $row['marca'] . '</td>';
                                             echo '<td>' . $row['fechaingreso'] . '</td>';
                                             echo '<td>' . $row['horaingreso'] . '</td>';
+                                                echo '<td>' . $row['cochera'] . '</td>';
+                                           
+                                        
+                                
+                                            $unAuto = vehiculo::TraerUnEstacionado($row['id']);
+                                            $id=$row['id'];
+                                            $stringdatos=$unAuto->mostrarDatos();
+                                            
+                                            
+                                            echo '
+                                            <td><img src="auto.png"  width="50" height="50" /><a  class="sacar" id="'.$row['id'] .'"  href="#"  >Se retira</a></td>';
+                                         
+                                             
+                                            echo '</tr>';
+                                            $con++;
+                                        }
+                                    
+                                        ?>
+                                    </tbody>
+                                </table>
+      </div>
+</form>
+
+
+                            </div>
+                            
+                            <div id="empleados_form" class="visible">
+
+
+
+                            <div class="panel-body">
+
+
+                                <table class="table table-striped">
+                                <thead>
+                                <th>#</th>
+                                <th>ID</th>
+                                <th>Patente</th>
+                                <th>Color</th>
+                                <th>Patente</th>
+                                <th>Fecha Ingreso</th>
+                                <th>Hora Ingreso</th>
+                                 <th>Cochera</th>
+                                
+                               
+                                 </thead>
+                                    <tbody>
+                                        <?php
+                                        //require './clases/AccesoDatos.php';
+                                        //require './clases/vehiculo.php';
+                                        $pdo = AccesoDatos::connect();
+                                       
+                                        $sql = 'SELECT * FROM estacionados';
+                                        $con = 1;
+                                        
+                                        foreach ($pdo->query($sql) as $row) {
+                                            echo "<tr>";
+                                           
+                                            echo '<td>' . $con . '</td>';
+                                            echo '<td>' . $row['id'] . '</td>';
+                                         
+                                            echo '<td>' . $row['patente'] . '</td>';
+                                             echo '<td>' . $row['color'] . '</td>';
+                                            echo '<td>' . $row['marca'] . '</td>';
+                                            echo '<td>' . $row['fechaingreso'] . '</td>';
+                                            echo '<td>' . $row['horaingreso'] . '</td>';
+                                                echo '<td>' . $row['cochera'] . '</td>';
                                            
                                         
                                 
@@ -883,12 +1092,18 @@ runOnLoad(function(){
                                 <th>#</th>
                                 <th>ID</th>
                                 <th>Patente</th>
+                                   <th>Color</th>
+
+                                   <th>Marca</th>
+
                                 <th>Fecha Ingreso</th>
                                 <th>Hora Ingreso</th>
                                 <th>Fecha Salida</th>
                                 <th>Hora Salida</th>
                                 <th>Tiempo Transcurrido</th>
-                                <th>Importe $</th>
+                              
+                                <th>Cochera</th>
+                                  <th>Importe $</th>
                                 <th>Accion</th>
                                  </thead>
                                     <tbody>
@@ -907,11 +1122,14 @@ runOnLoad(function(){
                                             echo '<td>' . $row['id'] . '</td>';
                                          
                                             echo '<td>' . $row['patente'] . '</td>';
+                                             echo '<td>' . $row['color'] . '</td>';
+                                              echo '<td>' . $row['marca'] . '</td>';
                                             echo '<td>' . $row['fechaingreso'] . '</td>';
                                             echo '<td>' . $row['horaingreso'] . '</td>';
                                             echo '<td>' . $row['fechasalida'] . '</td>';
                                             echo '<td>' . $row['horasalida'] . '</td>';
                                             echo '<td>' . $row['tiempotranscurrido'] . '</td>';
+                                            echo '<td>' . $row['cochera'] . '</td>';
                                             echo '<td>' . $row['importe'] . '</td>';
                                         
                                 
@@ -943,7 +1161,13 @@ runOnLoad(function(){
             </div>
               
                  
+
+
 </div>
+
+
+
+
                     <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
                       <div class="modal-dialog">
                         <div class="modal-content">
@@ -951,67 +1175,81 @@ runOnLoad(function(){
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             <h4 class="modal-title">Nuevo Usuario</h4>
                           </div>
-                          <div id="register_form">
-                          <form role="form" name="register" method="post" action="" >
+                      
+                          <form role="form" name="register" class="formulario" id= "register_form" method="post" enctype="multipart/form-data" action="" >
+                           <div id="resultado"></div>
+
+
                             <div class="col-lg-12">
                               <div class="form-group">
                                 <label>Nombre</label>
-                                <input name="nombre" id="nombre" value="" class="form-control" >
+                                <input name="nombre" id="nombre" value="" placeholder="Ingrese nombre de empleado" class="form-control" required="">
                                 <label class="error" for="name" id="name_error">Debe introducir su nombre.</label><br><br>
                               </div>
               
                               <div class="form-group">
                                 <label>Apellido</label>
-                                <input name="apellido" id="apellido" value="" class="form-control" >
+                                <input name="apellido" placeholder="Ingrese apellido de empleado"id="apellido" value="" class="form-control" required="">
                                 <label class="error" for="apellido" id="apell_error">Debe introducir su apellido.</label><br><br>
                               </div>
-              
-                              <div class="form-group">
-                                <label>Correo</label>
-                                <input name="correo" id="correo"value="" class="form-control">
-                                <label class="error" for="correo" id="correo_error">Debe introducir su correo.</label><br><br>
+                               
+                           <div class="form-group has-error">
+                            <label>Correo Electronico</label>
+                            <input class="form-control" type="email" name="correo" id="correo" placeholder="Correo electrónico" />
+                              <span id="error" class="help-block"></span>
+                                <label class="error" for="correo" id="correo_error" >Debe introducir su correo.</label><br><br>
                               </div>
-              
+                          
+                              
                               <div class="form-group">
                                 <label>Contraseña</label>
-                                <input name="clave"  id="clave" value="" class="form-control">
-                                <label class="error" for="clave" id="clave_error">Debe introducir su contraseña.</label><br><br>
+                                <input name="clave"  id="clave" value="" class="form-control" required="">
+                                <label class="error" for="clave" id="clave_error" placeholder="Ingrese contraseña"  >Debe introducir su contraseña.</label><br><br>
                               </div>
                              
+                          
                               <div class="form-group">
-                                <label>Perfil</label>
-                                <input name="perfil" id="perfil"  value="" class="form-control" >
-                                <label class="error" for="perfil" id="perfil_error">Debe introducir su perfil.</label><br><br>
-                              </div>
+                               <label >Perfil</label>
+                               
+                           <select id="perfil">
+                                    <option  value="admin">Admin</option>
+                                        <option  value="user">User</option>
+               
+                                       </select>
+                                 
+                                  </div>
+                                  <div class="form-group">
+                                  <label>Horario</label>
+                                 
+                              <select id="turno">
+                                       <option  value="mañana">Mañana</option>
+                                           <option  value="tarde">Tarde</option>
+                                           <option  value="noche">Noche</option>
+                                          </select>
+                                    </div>
+                                   
+      
+        <div class="form-group">
+                                <label>Fecha de alta</label>
+
+<input type="date"  id="fechacreacion" name="fecha">
+ </div>
+
+   <div>
+                                  <label>Seleccione foto de perfil empleado</label>
+                             <input type="file" name="foto" id="foto" />
+                             <img  src="./fotosEmpleados/pordefecto.jpg" width="50" height="50" class="fotoform"/>
+ 
               
-                              <div class="form-group">
-                                <label>Turno</label>
-                                <input name="turno"  id="turno" value=""class="form-control" >
-                                <label class="error" for="turno" id="turno_error">Debe introducir su turno.</label><br><br>
-                              </div>
-              
-              
-                              <div class="form-group">
-                                <label>Fecha de creacion</label>
-                                <input name="fechacreacion" id="fechacreacion" value="" class="form-control" >
-                                <label class="error" for="fecha" id="fecha_error">Debe introducir su fecha.</label><br><br>
-                              </div>
-              
-              
-                              <div class="form-group">
-                                <label>Foto</label>
-                                <input name="foto" id="foto" value="" class="form-control" >
-                                <label class="error" for="foto" id="foto_error">Debe introducir su nombre.</label><br><br>
-                              </div>
-              
-              
+                </div>
+                                   
                               <button type="submit"   class="btn btn-info btn-lg" id="enviar-btn" >
                                 <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Registrar
                               </button>
               
                             </div>
                           </form>
-                          </div>
+                       
                           <div class="modal-footer">
                             <button type="button" class="btn btn-danger btn-circle" data-dismiss="modal"><i class="fa fa-times"></i>x</button>
                           </div>
@@ -1030,81 +1268,91 @@ runOnLoad(function(){
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             <h4 class="modal-title">Modificar Usuario</h4>
                           </div>
-                          <div id="edit_form">
-                          <form role="form" name="register" method="post" action="" >
+                      
+                          <form role="form" name="register" class="formulario" id= "edit_form" method="post" enctype="multipart/form-data" action="" >
+                           <div id="resultado"></div>
+
+                          <input name="id" id="idamodif" value="" class="form-control" style="visibility:hidden" >
                             <div class="col-lg-12">
-                            
-                               
-                                <input name="id" id="idamodif" value="" class="form-control" style="visibility:hidden" >
-                            
                               <div class="form-group">
-                              <label>Nombre</label>
-                                <input name="nombre" id="nombremodif" value="" class="form-control" >
+                                <label>Nombre</label>
+                                <input name="nombre" id="nombremodif" value="" placeholder="Ingrese nombre de empleado" class="form-control" required="">
                                 <label class="error" for="name" id="name_error">Debe introducir su nombre.</label><br><br>
                               </div>
-               
+              
                               <div class="form-group">
                                 <label>Apellido</label>
-                                <input name="apellido" id="apellidomodif" value="" class="form-control" >
+                                <input name="apellido" placeholder="Ingrese apellido de empleado" id="apellidomodif" value="" class="form-control" required="">
                                 <label class="error" for="apellido" id="apell_error">Debe introducir su apellido.</label><br><br>
                               </div>
-              
-                              <div class="form-group">
-                                <label>Correo</label>
-                                <input name="correo" id="correomodif"value="" class="form-control">
-                                <label class="error" for="correo" id="correo_error">Debe introducir su correo.</label><br><br>
+                               
+                           <div class="form-group has-error">
+                            <label>Correo Electronico</label>
+                            <input class="form-control" type="email" name="correo" id="correomodif" placeholder="Correo electrónico" />
+                              <span id="error" class="help-block"></span>
+                                <label class="error" for="correo" id="correo_error" >Debe introducir su correo.</label><br><br>
                               </div>
-              
+                          
+                              
                               <div class="form-group">
                                 <label>Contraseña</label>
-                                <input name="clave"  id="clavemodif" value="" class="form-control">
-                                <label class="error" for="clave" id="clave_error">Debe introducir su contraseña.</label><br><br>
+                                <input name="clave"  id="clavemodif" value="" class="form-control" required="">
+                                <label class="error" for="clave" id="clave_error" placeholder="Ingrese contraseña"  >Debe introducir su contraseña.</label><br><br>
                               </div>
                              
+                          
                               <div class="form-group">
-                                <label>Perfil</label>
-                                <input name="perfil" id="perfilmodif"  value="" class="form-control" >
-                                <label class="error" for="perfil" id="perfil_error">Debe introducir su perfil.</label><br><br>
-                              </div>
+                               <label >Perfil</label>
+                               
+                           <select id="perfilmodif">
+                                    <option  value="admin">Admin</option>
+                                        <option  value="user">User</option>
+               
+                                       </select>
+                                 
+                                  </div>
+                                  <div class="form-group">
+                                  <label>Horario</label>
+                                 
+                              <select id="turnomodif">
+                                       <option  value="mañana">Mañana</option>
+                                           <option  value="tarde">Tarde</option>
+                                           <option  value="noche">Noche</option>
+                                          </select>
+                                    </div>
+                                   
+      
+        <div class="form-group">
+                                <label>Fecha de alta</label>
+
+<input type="date"  id="fechacreacionmodif" name="fecha">
+ </div>
+
+   <div>
+                                  <label>Seleccione foto de perfil empleado</label>
+                                      <input name="fotoanterior" id="fotoanterior" value="" class="form-control" style="visibility:hidden" >
+                            
+                             <input type="file" name="foto" id="fotomodif" />
+                             <img id="imagenamodificar" src=""  width="50" height="50" class="fotoform"/>
+                           
+                                
               
-                              <div class="form-group">
-                                <label>Turno</label>
-                                <input name="turno"  id="turnomodif" value=""class="form-control" >
-                                <label class="error" for="turno" id="turno_error">Debe introducir su turno.</label><br><br>
-                              </div>
-              
-              
-                              <div class="form-group">
-                                <label>Fecha de creacion</label>
-                                <input name="fechacreacion" id="fechacreacionmodif" value="" class="form-control" >
-                                <label class="error" for="fecha" id="fecha_error">Debe introducir su fecha.</label><br><br>
-                              </div>
-              
-              
-                              <div class="form-group">
-                                <label>Foto</label>
-                                <input name="foto" id="fotomodif" value="" class="form-control" >
-                                <label class="error" for="foto" id="foto_error">Debe introducir su foto.</label><br><br>
-                              </div>
-              
-              
-                              <button type="submit"   class="btn btn-info btn-lg" id="editar-btn" >
+                </div>
+                                   
+                                <button type="submit"   class="btn btn-info btn-lg" id="editar-btn" >
                                 <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Modificar
                               </button>
               
                             </div>
                           </form>
-                          </div>
+                       
                           <div class="modal-footer">
                             <button type="button" class="btn btn-danger btn-circle" data-dismiss="modal"><i class="fa fa-times"></i>x</button>
                           </div>
                         </div>
                       </div>
                     </div>
-                </div>
-            </div>
-        </div>
-         
+              
 
  
 
@@ -1116,15 +1364,16 @@ runOnLoad(function(){
         <h2>Lista de Precios</h2>
         <ul class="list-group">
         
-          <li class="list-group-item">Precio por hora: $70</li>
-          <li class="list-group-item">Precio por dia:  $590</li>
+          <li class="list-group-item">Precio por hora: $10</li>
+           <li class="list-group-item">Precio por media estadia:  $90</li>
+          <li class="list-group-item">Precio por estadia completa:  $170</li>
+          
          </ul>
       </div>
 
       </div>
 
  
-    
                 
     
 
@@ -1146,6 +1395,18 @@ runOnLoad(function(){
                               <div class="form-group">
                               <label>Patente</label>
                                 <input name="patente" id="patenteasalir" value="" class="form-control" >
+                               
+                              </div>
+
+                                   <div class="form-group">
+                              <label>Color</label>
+                                <input name="color" id="colorasalir" value="" class="form-control" >
+                               
+                              </div>
+
+                                   <div class="form-group">
+                              <label>Marca</label>
+                                <input name="marca" id="marcaasalir" value="" class="form-control" >
                                
                               </div>
                
@@ -1174,12 +1435,17 @@ runOnLoad(function(){
                               </div>
                               <div class="form-group">
                                 <label>Tiempo Transcurrido</label>
-                                <input name="tiempotranscurrido"  id="tiempotranscurrido" value=""class="form-control" >
+                                <input name="tiempotranscurrido"  id="tiempotranscurrido" value="" class="form-control" >
+                                
+                              </div>
+                                <div class="form-group">
+                                <label>Cochera</label>
+                                <input name="cochera"  id="cochera" value="" class="form-control">
                                 
                               </div>
                               <div class="form-group">
                                 <label>Importe  $$ </label>
-                                <input name="importe"  id="importe" value=""class="form-control" >
+                                <input name="importe"  id="importe" value="" class="form-control" >
                                 
                               </div>
                               </fieldset>
@@ -1215,7 +1481,7 @@ runOnLoad(function(){
                             <h4 class="modal-title">Modificar Facturado</h4>
                           </div>
                           <div id="edit_form">
-                          <form role="form" name="register" method="post" action="" >
+                          <form role="form" name="register" id="formfacturado" method="post" action="" >
                             <div class="col-lg-12">
                             
                                
@@ -1226,7 +1492,22 @@ runOnLoad(function(){
                                 <input name="patente" id="patentemodif" value="" class="form-control" >
                                 <label class="error" for="patente" id="name_error">Debe introducir patente.</label><br><br>
                               </div>
-               
+
+                                <div class="form-group">
+                              <label>Color</label>
+                                <input name="color" id="colormodif" value="" class="form-control" >
+                                <label class="error" for="color" id="name_error">Debe introducir color de vehiculo.</label><br><br>
+                              </div>
+
+                                <div class="form-group">
+                              <label>Marca</label>
+                                <input name="marca" id="marcamodif" value="" class="form-control" >
+                                <label class="error" for="marca" id="name_error">Debe introducir marca de vehiculo.</label><br><br>
+                              </div>
+                                  </div>
+                                <div class="form-group">
+                                <label>Cochera</label>
+                                <input name="cochera"  id="cocheramodif" value="" class="form-control">
                               <div class="form-group">
                                 <label>Hora de ingreso</label>
                                 <input name="horaingreso" id="horaingresomodif" value="" class="form-control" >

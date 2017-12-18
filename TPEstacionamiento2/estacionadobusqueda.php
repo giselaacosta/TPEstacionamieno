@@ -27,12 +27,18 @@ if(isset($id) )
 
     $id =$unauto->id ;
     $patente =$unauto->patente ;
+    $color =$unauto->color ;
+    $marca =$unauto->marca ;
+     $cochera =$unauto->cochera ;
     $fechaingreso=$unauto->fechaingreso;
     $horaingreso=$unauto->horaingreso;
     $fechasalida=date("Y-m-d");
     $horasalida=date("H:i:s");
     $autosalida->id=$id;
     $autosalida->patente=$patente;
+    $autosalida->color=$color;
+    $autosalida->marca=$marca;
+     $autosalida->cochera=$cochera;
     $autosalida->fechaingreso=$fechaingreso;
     $autosalida->horaingreso=$horaingreso;
     $autosalida->fechasalida=$fechasalida;

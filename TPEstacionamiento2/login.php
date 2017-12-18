@@ -30,7 +30,7 @@ session_start();
 function Usuarioexiste() {
    
         alert("los datos se guardaron correctamente!");
-        
+    
        
 }
       </script> 
@@ -49,12 +49,15 @@ $existe=false;
 $resultado=Empleado::TraerTodoLosEmpleados(); 
 foreach($resultado as $fila)
 {
+
+
   if($fila->GetMail()==$email && $fila->GetClave()==$pass )
   {
 
    
     if($fila->GetPerfil()=="admin"){
         header('Location: indexAdmin.php');
+        
      
     }
     else

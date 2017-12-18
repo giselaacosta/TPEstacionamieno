@@ -1,18 +1,22 @@
 <?php
 require './clases/AccesoDatos.php';
 require './clases/vehiculo.php';
-
-$busqueda=$_POST['search'];
-
+require './clases/Cochera.php';
 
 
+$busqueda=$_POST['buscar'];
 
-if(isset($id) )
+
+
+
+if(isset($busqueda) )
 
 
 {
     $pdo = AccesoDatos::connect();
     $estacionados = vehiculo::TraerTodoLosEstacionadosPorBusqueda($busqueda);
+
+    return $estacionados;
     
   
     

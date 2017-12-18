@@ -305,8 +305,44 @@ position: absolute;
   }
 
   h2,h1{
-    color:coral;
+    color:black;
     font-size:0.9cm;
     
     text-align: center;
   }
+
+  .esquina{
+    color:black;
+    font-size: 15px;
+    padding-left:15px;
+    margin-top:75px;
+    margin-bottom:75px;
+
+    
+  }
+
+  .sesion{
+    color:black;
+   text-align: right;
+   font-size: 13px;
+    
+  }
+
+  /* Estilo por defecto */
+ 
+input:required:invalid {
+ 
+border: 1px solid red;
+ 
+}
+ 
+input:required:valid {
+ 
+border: 1px solid green;
+ 
+}
+
+form input[type="email"]:focus:required:invalid{
+ border:2px solid red;
+ /* otras propiedades */
+}

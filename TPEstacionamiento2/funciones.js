@@ -27,6 +27,8 @@ function IngresoAdmin() {
     document.getElementById("clave").value = "2222";
 }
 function RecordarDatos() {
+    var correo = document.getElementById("email");
+    localStorage.setItem("useractual", JSON.stringify(correo.value));
     if (document.getElementById('checkbox').checked == true) {
         Agregar();
     }

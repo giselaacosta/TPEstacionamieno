@@ -40,7 +40,7 @@ if(isset($unAuto->patente) && isset($unAuto->fechaingreso) )
     $unAuto->InsertarEstacionado();
     $unacochera->OcuparCochera($cochera);
     echo "Se registró con exito";
-    header("location:indexUser.php");
+    header("location:indexAdmin.php");
 
 }
 else

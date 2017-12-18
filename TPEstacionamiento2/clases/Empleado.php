@@ -11,7 +11,6 @@ class Empleado
 	public $fechacreacion;
 	public $foto;
 
-
 	public function GetMail()
 	{
 		return $this->mail;
@@ -75,12 +74,14 @@ class Empleado
 	 public function InsertarEmpleado()
 	 {
 				$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-				$consulta =$objetoAccesoDato->RetornarConsulta("INSERT INTO `empleados`( `nombre`, `apellido`, `clave`, `mail`, `turno`, `perfil`, `fechacreacion`, `foto`) VALUES ('$this->nombre','$this->apellido','$this->clave','$this->mail','$this->turno','$this->perfil','$this->fechacreacion','$this->foto')");
+				$consulta =$objetoAccesoDato->RetornarConsulta("INSERT INTO `empleados`( `nombre`, `apellido`, `clave`, `mail`, `turno`, `perfil`, `fechacreacion`,`foto`) VALUES ('$this->nombre','$this->apellido','$this->clave','$this->mail','$this->turno','$this->perfil','$this->fechacreacion','$this->foto')");
 				$consulta->execute();
 				return $objetoAccesoDato->RetornarUltimoIdInsertado();
 				
 
 	 }
+
+
 
 
 
@@ -95,7 +96,7 @@ class Empleado
 				$consulta->bindValue(':turno', $this->turno, PDO::PARAM_STR);
 				$consulta->bindValue(':perfil', $this->perfil, PDO::PARAM_STR);
 				$consulta->bindValue(':fechacreacion', $this->fechacreacion, PDO::PARAM_STR);
-				$consulta->bindValue(':foto', $this->foto, PDO::PARAM_STR);
+				
 				$consulta->execute();		
 				return $objetoAccesoDato->RetornarUltimoIdInsertado();
 	 }
@@ -123,7 +124,7 @@ class Empleado
 			$consulta->bindValue(':turno', $this->turno, PDO::PARAM_STR);
 			$consulta->bindValue(':perfil', $this->perfil, PDO::PARAM_STR);
 			$consulta->bindValue(':fechacreacion', $this->fechacreacion, PDO::PARAM_STR);
-			$consulta->bindValue(':foto', $this->foto, PDO::PARAM_STR);
+		    $consulta->bindValue(':foto', $this->foto, PDO::PARAM_STR);
 			return $consulta->execute();
 	 }
 	 public function GuardarEmpleado()
@@ -150,7 +151,7 @@ class Empleado
 	public static function TraerUnEmpleado($id) 
 	{
 			$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-			$consulta =$objetoAccesoDato->RetornarConsulta("select id,nombre as nombre, apellido as apellido,clave as clave,mail as mail,turno as turno,perfil as perfil,fechacreacion as fechacreacion,foto as foto  from empleados where id = $id");
+			$consulta =$objetoAccesoDato->RetornarConsulta("select id,nombre as nombre, apellido as apellido,clave as clave,mail as mail,turno as turno,perfil as perfil,fechacreacion as fechacreacion,foto as foto from empleados where id = $id");
 			$consulta->execute();
 			$empleadoBuscado= $consulta->fetchObject('Empleado');
 			return $empleadoBuscado;				

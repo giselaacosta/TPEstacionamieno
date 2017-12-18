@@ -52,12 +52,14 @@ function IngresoAdmin(){
 
 function RecordarDatos()
 {
+  var correo= document.getElementById("email") as HTMLInputElement;
+localStorage.setItem("useractual", JSON.stringify(correo.value));
   
 	 if ((document.getElementById('checkbox') as HTMLInputElement).checked==true)
   {
 
     Agregar();
-        
+    
         }
        
           
