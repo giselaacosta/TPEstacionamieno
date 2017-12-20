@@ -22,8 +22,8 @@ class Cochera
 	{
 			$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
 			$consulta =$objetoAccesoDato->RetornarConsulta("UPDATE cocheras SET disponible='NO' WHERE id=$id");
-			$consulta->execute();			
-			return $consulta->fetchAll(PDO::FETCH_CLASS, "Cochera");		
+			$consulta->execute();
+			
 	}
 
 	public static function LiberarCochera($id)
@@ -31,7 +31,7 @@ class Cochera
 			$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
 			$consulta =$objetoAccesoDato->RetornarConsulta("UPDATE cocheras SET disponible='SI' WHERE id=$id");
 			$consulta->execute();			
-			return $consulta->fetchAll(PDO::FETCH_CLASS, "Cochera");		
+						
 	}
 	
 

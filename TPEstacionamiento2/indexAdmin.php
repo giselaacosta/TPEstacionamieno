@@ -11,16 +11,14 @@
         <link href="css/estilo.css" rel="stylesheet">
         <link href="css/style.css" rel="stylesheet">
         <link href="css/animacion.css" rel="stylesheet">
-          <script src="./Persona.js"></script>
-          <script src="./Usuario.js"></script>
-          <script src="./Empleado.js"></script>
-           <script src="./funciones.js"></script>
-           
-           <script src="./node_modules\jquery\dist/jquery.min.js"></script>
-           <script src="./js/ajax.js"></script>
-         
-           <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-           <link rel="stylesheet" type="text/css" href="css/jquery-ui-1.8.6.css" />
+        <script src="./Persona.js"></script>
+        <script src="./Usuario.js"></script>
+        <script src="./Empleado.js"></script>
+        <script src="./funciones.js"></script>
+        <script src="./node_modules\jquery\dist/jquery.min.js"></script>
+        <script src="./js/ajax.js"></script>
+        <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/jquery-ui-1.8.6.css" />
 <style>
 .error {
   color:red;
@@ -36,12 +34,50 @@
 <script type="text/javascript" src="./js/jquery-ui-1.8.6.min.js"></script>
 
 <script src="./js/runonload.js"></script>
-    <script src="./js/jquery.validate.js"></script>    
-     <script src="./js/jquery.validate.min.js"></script>    
-  <script src="./js/validador.js"></script>
+<script src="./js/jquery.validate.js"></script>    
+<script src="./js/jquery.validate.min.js"></script>    
+<script src="./js/validador.js"></script>
 
 <script type="text/javascript">
+function MostrarTabla(response)
+{
+document.getElementById("grillabusqueda").className ="visible";
+document.getElementById("grilladeestacionados").className ="oculto";
 
+resultado=JSON.parse(response);
+
+console.log(resultado.lenght);
+if(resultado[0]==null)
+{
+
+  alert("No existe en registro");
+  document.getElementById("grillabusqueda").className ="oculto";
+}
+for (x in resultado) {
+  document.getElementById("tablita").innerHTML +="<tr><td>"+resultado[x].id+"</td><td>"+resultado[x].patente+"</td><td>"+resultado[x].color+"</td><td>"+resultado[x].marca+"</td><td>"+resultado[x].fechaingreso+"</td><td>"+resultado[x].horaingreso+"</td><td>"+resultado[x].cochera+"</td></tr>";
+}
+
+}
+
+function MostrarTablaEmpleados(response)
+{
+document.getElementById("grillabusquedaempleados").className ="visible";
+document.getElementById("grilladeempleados").className ="oculto";
+
+resultado=JSON.parse(response);
+
+console.log(resultado.lenght);
+if(resultado[0]==null)
+{
+
+  alert("No existe en registro");
+  document.getElementById("grillabusquedaempleados").className ="oculto";
+}
+for (x in resultado) {
+  document.getElementById("tablitaempleados").innerHTML +="<tr><td>"+resultado[x].id+"</td><td>"+resultado[x].nombre+"</td><td>"+resultado[x].apellido+"</td><td>"+resultado[x].clave+"</td><td>"+resultado[x].mail+"</td><td>"+resultado[x].turno+"</td><td>"+resultado[x].perfil+"</td><td>"+resultado[x].fechacreacion+"</td></tr>";
+}
+
+}
 function ObtenerDatos()
 {
    var email= localStorage.getItem("useractual"); 
@@ -75,7 +111,7 @@ $(document).ready(function() {
 	$("#enviar-btn").click(function() {
    var logueos = localStorage.getItem("empleados");
     arrayusuarios = JSON.parse(logueos);
-		//Obtenemos el valor del campo nombre
+	
     var nombre = $("input#nombre").val();
     var apellido = $("input#apellido").val();
     var correo = $("#correo").val();
@@ -163,53 +199,14 @@ $(document).ready(function() {
         	//Obtenemos el valor del campo nombre
 		var fechacreacion = $("#fechacreacion").val();
 
-		//Validamos el campo nombre, simplemente miramos que no esté vacío
+
 		if (nombre == "") {
 			$("label#fecha_error").show();
 			$("#fechacreacion").focus();
 			return false;
 		}
 
-    
-   //var formData = new FormData($(".formulario")[0]);
 
-   
-   
-
-
-
-
-		//Construimos la variable que se guardará en el data del Ajax para pasar al archivo php que procesará los datos
-		/*var dataString = 'nombre=' + nombre + '&apellido=' + apellido + '&correo=' + correo + '&clave=' + clave + '&perfil=' + perfil + '&turno=' + turno + '&fechacreacion=' + fechacreacion+ '&foto=' + foto;
-
-    */
-    /*
-    console.log(formData);
-
-          $.ajax({
-      
-        url:   'usuarioalta.php',
-      
-     
-           data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-            type: 'POST',
-
-        success: function(response) {
-        
-                $('#register_form').html("<div id='message'></div>");
-                $('#message').html("<h2>Se ha registrado correctamente!</h2>")
-                .hide()
-                .fadeIn(1500, function() {
-              window.location.reload(true);
-             
-                });
-            }
-             
-            
-    });*/
 
 
 var inputFileImage = document.getElementById("foto");
@@ -246,7 +243,12 @@ $.ajax({
             }
   
    });  
- });  
+ }); 
+
+
+
+
+
   $('.delete').click(function(){
     
 
@@ -349,6 +351,8 @@ $.ajax({
       document.getElementById("grilladeestacionados").className ="oculto";  
       document.getElementById("listaprecios").className ="oculto";  
       document.getElementById("listafacturados").className ="oculto";  
+      document.getElementById("grillabusqueda").className ="oculto";
+      document.getElementById("grillabusquedaempleados").className ="oculto";
     });  
 
    
@@ -358,6 +362,8 @@ $.ajax({
       document.getElementById("altaestacionado").className ="oculto";  
       document.getElementById("grilladeestacionados").className ="oculto";  
       document.getElementById("listaprecios").className ="oculto";  
+      document.getElementById("grillabusqueda").className ="oculto";
+      document.getElementById("grillabusquedaempleados").className ="oculto";
     });  
 
        
@@ -368,7 +374,9 @@ $.ajax({
       document.getElementById("altaestacionado").className ="visible";
       document.getElementById("grilladeestacionados").className ="oculto";
       document.getElementById("listaprecios").className ="oculto";
-      document.getElementById("listafacturados").className ="oculto";  
+      document.getElementById("listafacturados").className ="oculto"; 
+      document.getElementById("grillabusqueda").className ="oculto"; 
+      document.getElementById("grillabusquedaempleados").className ="oculto";
     });  
     $('.edit').click(function(){
     
@@ -411,11 +419,11 @@ $.ajax({
 });
 
 
-$('.busquedaform').click(function(){
+$('#botonbusqueda').click(function(){
     
 
    
-       var service = $(this).attr('buscar');
+       var service =  document.getElementById("buscar").value;
 
         var dataString = 'buscar=' + service ;
      
@@ -423,24 +431,41 @@ $('.busquedaform').click(function(){
         $.ajax({
             type: "POST",
             url: "Busqueda.php",
-            data: dataString
-         
-      })
-      .done(function(resultado) {
-        document.getElementById("busqueda").className =visible,
-          document.getElementById("empleados_form").className =oculto,
-  
-      localStorage.setItem("patentes",resultado),
-      patentes=localStorage.getItem("patentes"),  
-      myArr = JSON.parse(patentes) 
+            data: dataString,
+            success: function(response) {
+              localStorage.setItem("patentes",response);
+              MostrarTabla(response);
+
+          
+        }
+      });
+      return false;
+      
+});
+
+
+$('#botonbusquedaapellido').click(function(){
+    
+
+   
+       var service =  document.getElementById("buscarapellido").value;
+
+        var dataString = 'buscar=' + service ;
      
-      })
-      .fail(function(){
+        var myArr;
+        $.ajax({
+            type: "POST",
+            url: "BusquedaEmpleado.php",
+            data: dataString,
+            success: function(response) {
+              localStorage.setItem("busquedaempleados",response);
+              MostrarTablaEmpleados(response);
 
-        alert('Hubo un error')
-      })     
-
-
+          
+        }
+      });
+      return false;
+      
 });
 
 $('.editfacturado').click(function(){
@@ -664,8 +689,9 @@ var data = new FormData();
       document.getElementById("grilladeempleados").className ="oculto";
       document.getElementById("altaestacionado").className ="oculto";  
       document.getElementById("listaprecios").className ="oculto";  
-      
+      document.getElementById("grillabusqueda").className ="oculto";
       document.getElementById("listafacturados").className ="oculto";  
+      document.getElementById("grillabusquedaempleados").className ="oculto";
     });
     
 
@@ -674,8 +700,9 @@ var data = new FormData();
       document.getElementById("grilladeempleados").className ="oculto";
       document.getElementById("altaestacionado").className ="oculto";  
       document.getElementById("listaprecios").className ="visible"; 
-            
-      document.getElementById("listafacturados").className ="oculto";   
+      document.getElementById("grillabusqueda").className ="oculto";
+      document.getElementById("listafacturados").className ="oculto"; 
+      document.getElementById("grillabusquedaempleados").className ="oculto";  
     });
     $('.sacar').click(function(){
     
@@ -730,128 +757,97 @@ runOnLoad(function(){
     </head>
 
    <body onload=ObtenerDatos();>
-    <div class="esquina"><div class="sesion">Sesion abierta por... <div id="user" ></div></div>
-        <nav class="navbar navbar-default navbar-fixed-top container-fluid" role="navigation">
-            <div >
-                <div class="row">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                    <div class="navbar-header">
-                   
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="#">Estacionamiento</a>
-                    </div>
-
-                    <!-- Collect the nav links, forms, and other content for toggling -->
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                        <ul class="nav navbar-nav main-nav  clear navbar-right ">
-                            <li><a  class="grillaempleados" href="#">Alta de Empleados</a></li>
-                            <li><a class="grillaestacionados" href="#">Estacionados</a></li>
-                            <li><a class="altaestacionado" href="#">Alta estacionado</a></li>
-                            <li><a class="facturados" href="#">Facturados</a></li>
-                            <li><a class="Listaprecios" href="#">Lista de precios</a></li>
-            
-                        </ul>
-                       
-                    </div><!-- /.navbar-collapse -->
-                </div>
-            </div><!-- /.container-fluid -->
-
-            
-        </nav>
-
-
-
-        <div id="mensajes" class="oculto">
-        
-
-      
-      
-
-      </div>
-        <div class="container">
-
-        <div class="row vertical-offset-100">
-        <div class="col-md-4 col-md-offset-4">
-          <div class="panel panel-default">   
-        <div id="altaestacionado" class="oculto">
-        
-
-          <div class="panel panel-default">
-        
-            
-           <label class="panel-title">Ingrese Patente</label>
-
-            
-          <form  action="gestionEntrada1.php" id="altaestacionado" method="post">
-          <input type="text" onkeydown="MostrarBoton(this)" name="patente" title="formato de patente: AAA 666" id="autocomplete" required pattern="[a-z]{3}[0-9]{3}" />
-          <br>
-           <label class="panel-title">Ingrese Color</label>
-           <input type="text" name="color" id="color" required="" />
-          <br>
-           <label class="panel-title">Ingrese Marca</label>
-           <input type="text"  name="marca" id="marca" required="" />
-          <br>
-
-           <label class="panel-title">Seleccione Cochera</label>
-          
-          <br>
-          <select name="cocheraseleccionada" id="cocheraseleccionada">
-   
-        <?php
-           
-          require './clases/AccesoDatos.php';
-          require './clases/vehiculo.php';
-          require './clases/Cochera.php';
-        
-             $conn=mysqli_connect("mysql.hostinger.com.ar","u400470299_gise","123456","u400470299_estac") ;                          
-          $consulta="select * from cocheras where disponible='SI' ";
-          $resultado=mysqli_query($conn,$consulta);
-            while($lista=mysqli_fetch_array($resultado)){
- 
-      ?> 
-        <option value="<? echo $lista['id']?>">  <? echo $lista['cochera']?></option> 
-    <? } ?>
-</select> 
-      
-
-                              
-          <input type="submit" id="botonIngreso" class="MiBotonUTN" value="ingreso"  name="estacionar" />
-          <br/>
-        
-     
-        </form>
-
-
-            </div>
+      <div class="esquina">
+        <div class="sesion">Sesion abierta por... <div id="user" >
         </div>
       </div>
+        <nav class="navbar navbar-default navbar-fixed-top container-fluid" role="navigation">
+            <div >
+              <div class="row">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                  <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                      <span class="sr-only">Toggle navigation</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Estacionamiento</a>
+                  </div>
+                  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav main-nav  clear navbar-right ">
+                      <li><a  class="grillaempleados" href="#">Alta de Empleados</a></li>
+                      <li><a class="grillaestacionados" href="#">Estacionados</a></li>
+                      <li><a class="altaestacionado" href="#">Alta estacionado</a></li>
+                      <li><a class="facturados" href="#">Facturados</a></li>
+                      <li><a class="Listaprecios" href="#">Lista de precios</a></li>
+                    </ul>
+                  </div><!-- /.navbar-collapse -->
+              </div>
+            </div><!-- /.container-fluid -->
+        </nav>
+      <div id="mensajes" class="oculto">
       </div>
+      <div class="container">
+        <div class="row vertical-offset-100">
+          <div class="col-md-4 col-md-offset-4">
+            <div class="panel panel-default">   
+               <div id="altaestacionado" class="oculto">
+                 <div class="panel panel-default">
+                  <label class="panel-title">Ingrese Patente</label>
+                    <form  action="gestionEntrada1.php" id="altaestacionado" method="post">
+                      <input type="text" onkeydown="MostrarBoton(this)" name="patente" title="formato de patente: AAA 666" id="autocomplete" required pattern="[a-z]{3}[0-9]{3}" />
+                        <br>
+                          <label class="panel-title">Ingrese Color</label>
+                            <input type="text" name="color" id="color" required="" />
+                        <br>
+                          <label class="panel-title">Ingrese Marca</label>
+                          <input type="text"  name="marca" id="marca" required="" />
+                        <br>
+                        <label class="panel-title">Seleccione Cochera</label>
+                        <br>
+                          <select name="cocheraseleccionada" id="cocheraseleccionada">
+                        <?php
+           
+                        require './clases/AccesoDatos.php';
+                        require './clases/vehiculo.php';
+                        require './clases/Cochera.php';
+                        $conn=mysqli_connect("mysql.hostinger.com.ar","u400470299_gise","123456","u400470299_estac") ;                                 $consulta="select * from cocheras where disponible='SI' ";
+                        $resultado=mysqli_query($conn,$consulta);
+                        while($lista=mysqli_fetch_array($resultado)){
+                        ?> 
+                         <option value="<? echo $lista['id']?>">  <? echo $lista['id'].'-'.$lista['cochera']?></option> 
+                         <? } ?>
+                          </select> 
+                        <input type="submit" id="botonIngreso" class="MiBotonUTN" value="ingreso"  name="estacionar" />
+                        <br/>
+                    </form>
+                  </div>
+                 </div>
+               </div>
+            </div>
+          </div>
+        </div>
+      </div>      
 
-      </div>
-
- 
-      </div>
-            
-
-             <div id="resp"></div>    
-      <div id="grilladeempleados" class="oculto">
-            <div class="follow_container">
-             
-                    <div id="contenido" >
-                        
-                        
-                       
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Lista de Usuarios</h3>
-                            </div>
-                            <div id="empleados_form">
-                            <div class="panel-body">
+      <div id="resp">
+      </div>    
+      <div id="grilladeempleados" class="oculto">  
+          <div class="follow_container">
+              <div id="contenido" >
+                  <div class="panel panel-primary">
+                      <div class="panel-heading">
+                         <h3 class="panel-title">Lista de Usuarios</h3>
+                         <h5>Buscar por apellido</h5>
+                         <form class="busquedaapellidoform" name="buscador" method="post"> 
+                              <input id="buscarapellido" name="buscar" type="search" autofocus >
+                              <input type="submit" name="buscador" id="botonbusquedaapellido" value="buscar">
+                                  
+                 
+                          </form>
+                      </div>
+                          <div id="empleados_form">
+                              <div class="panel-body">
                                 <table class="table table-striped">
                                     <thead>
                                     <th>#</th>
@@ -862,7 +858,7 @@ runOnLoad(function(){
                                     <th>Email</th>
                                     <th>Turno</th>
                                     <th>Perfil</th>
-                                    <th>Fecha de Creacion</th>
+                                    <th>Fecha de Ingreso</th>
                                     <th>Foto</th>
                                     <th>Accion</th>
                                               
@@ -911,116 +907,118 @@ runOnLoad(function(){
                                     </tbody>
                                 </table>
                                 <input id="btn_usuarios" onclick="Modal()"; type="button" class="btn btn-primary" value="Nuevo Empleado"/><br/><br/>
-                            </div>
-                        </div>
+                              </div>
+                          </div>
                     </div>
                     <div id="result">
                     </div>
               
-                    </div>
-                    </div>
-                    </div>
-       
-         <div id="grilladeestacionados" class="oculto">
-            
-         <div class="follow_container">
-             
-                    <div id="contenido" >
-                        
-                        
-                       
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Lista de Estacionados</h3><h5>Buscar por patente</h5>
-
-
-    <form class="busquedaform" name="buscador" method="post" action="busqueda.php"> 
-    <input id="buscar" name="buscar" type="search" autofocus >
-    <input type="submit" name="buscador" value="buscar">
-
-      <div id="busqueda" class="oculto">
-
-        <table class="table table-striped">
-                                <thead>
-                                <th>#</th>
-                                <th>ID</th>
-                                <th>Patente</th>
-                                <th>Color</th>
-                                <th>Patente</th>
-                                <th>Fecha Ingreso</th>
-                                <th>Hora Ingreso</th>
-                                 <th>Cochera</th>
-                                
-                               
-                                 </thead>
-                                    <tbody>
-                                        <?php
-                                        //require './clases/AccesoDatos.php';
-                                        //require './clases/vehiculo.php';
-                                        $pdo = AccesoDatos::connect();
-                                       
-                                        $sql = 'SELECT * FROM estacionados';
-                                        $con = 1;
-                                        
-                                        foreach ($pdo->query($sql) as $row) {
-                                            echo "<tr>";
-                                           
-                                            echo '<td>' . $con . '</td>';
-                                            echo '<td>' . $row['id'] . '</td>';
-                                         
-                                            echo '<td>' . $row['patente'] . '</td>';
-                                             echo '<td>' . $row['color'] . '</td>';
-                                            echo '<td>' . $row['marca'] . '</td>';
-                                            echo '<td>' . $row['fechaingreso'] . '</td>';
-                                            echo '<td>' . $row['horaingreso'] . '</td>';
-                                                echo '<td>' . $row['cochera'] . '</td>';
-                                           
-                                        
-                                
-                                            $unAuto = vehiculo::TraerUnEstacionado($row['id']);
-                                            $id=$row['id'];
-                                            $stringdatos=$unAuto->mostrarDatos();
-                                            
-                                            
-                                            echo '
-                                            <td><img src="auto.png"  width="50" height="50" /><a  class="sacar" id="'.$row['id'] .'"  href="#"  >Se retira</a></td>';
-                                         
-                                             
-                                            echo '</tr>';
-                                            $con++;
-                                        }
-                                    
-                                        ?>
-                                    </tbody>
-                                </table>
+                  </div>
+              </div>
       </div>
-</form>
+        
 
+      <div id="grillabusqueda" class="oculto">  
+          <div class="follow_container">
+              <div id="contenido" >
+                  <div class="panel panel-primary">
+                      <div class="panel-heading">
+                         <h3 class="panel-title">Resultado Busqueda</h3>
+                      </div>
+                          <div id="empleados_form">
+                              <div class="panel-body">
+                              <table class="table table-striped">
+                              <thead>
+                              <th>#</th>
+                              <th>ID</th>
+                              <th>Patente</th>
+                              <th>Color</th>
+                              <th>Fecha Ingreso</th>
+                              <th>Hora Ingreso</th>
+                              <th>Cochera</th>
+                              </thead>
+                              <tbody id="tablita">
 
-                            </div>
-                            
-                            <div id="empleados_form" class="visible">
-
-
-
-                            <div class="panel-body">
-
-
-                                <table class="table table-striped">
-                                <thead>
-                                <th>#</th>
-                                <th>ID</th>
-                                <th>Patente</th>
-                                <th>Color</th>
-                                <th>Patente</th>
-                                <th>Fecha Ingreso</th>
-                                <th>Hora Ingreso</th>
-                                 <th>Cochera</th>
-                                
+                             </tbody>
+                            </table>
                                
-                                 </thead>
-                                    <tbody>
-                                        <?php
+                              </div>
+                          </div>
+                    </div>
+                   
+              
+                  </div>
+              </div>
+      </div>
+    
+
+
+      <div id="grillabusquedaempleados" class="oculto">  
+          <div class="follow_container">
+              <div id="contenido" >
+                  <div class="panel panel-primary">
+                      <div class="panel-heading">
+                         <h3 class="panel-title">Resultado Busqueda Empleados</h3>
+                      </div>
+                          <div id="empleados_form">
+                              <div class="panel-body">
+                              <table class="table table-striped">
+                              <thead>
+                     
+                              <th>ID Usuario</th>
+                              <th>Nombre</th>
+                              <th>Apellido</th>
+                              <th>Clave</th>
+                              <th>Email</th>
+                              <th>Turno</th>
+                              <th>Perfil</th>
+                              <th>Fecha de Ingreso</th>
+                            
+                             
+                              </thead>
+                              <tbody id="tablitaempleados">
+
+                             </tbody>
+                            </table>
+                               
+                              </div>
+                          </div>
+                    </div>
+                   
+              
+                  </div>
+              </div>
+      </div>
+      <div id="grilladeestacionados" class="oculto">
+          <div class="follow_container">
+              <div class="panel panel-primary">
+                  <div class="panel-heading">
+                      <h3 class="panel-title">Lista de Estacionados</h3>
+                      <h5>Buscar por patente</h5>
+                          <form class="busquedaform" name="buscador" method="post"> 
+                              <input id="buscar" name="buscar" type="search" autofocus >
+                              <input type="submit" name="buscador" id="botonbusqueda" value="buscar">
+                                  <div class="contenidobusqueda">
+                                  </div> 
+                 
+                          </form>
+                 
+              </div>
+              <div id="empleados_form" class="visible">
+                  <div class="panel-body">
+                      <table class="table table-striped">
+                          <thead>
+                            <th>#</th>
+                            <th>ID</th>
+                            <th>Patente</th>
+                            <th>Color</th>
+                            <th>Marca</th>
+                            <th>Fecha Ingreso</th>
+                            <th>Hora Ingreso</th>
+                            <th>Cochera</th>
+                          </thead>
+                          <tbody>
+                            <?php
                                         //require './clases/AccesoDatos.php';
                                         //require './clases/vehiculo.php';
                                         $pdo = AccesoDatos::connect();
@@ -1033,8 +1031,7 @@ runOnLoad(function(){
                                            
                                             echo '<td>' . $con . '</td>';
                                             echo '<td>' . $row['id'] . '</td>';
-                                         
-                                            echo '<td>' . $row['patente'] . '</td>';
+                                             echo '<td>' . $row['patente'] . '</td>';
                                              echo '<td>' . $row['color'] . '</td>';
                                             echo '<td>' . $row['marca'] . '</td>';
                                             echo '<td>' . $row['fechaingreso'] . '</td>';
@@ -1056,56 +1053,41 @@ runOnLoad(function(){
                                             $con++;
                                         }
                                     
-                                        ?>
-                                    </tbody>
-                                </table>
-                               
-                            </div>
-                        </div>
-                    </div>
-                    <div id="result">
-                    </div>
-              
-                    </div>
-                    </div>
-
-            </div>
-              
-                 
-</div>
-<div id="listafacturados" class="oculto">
-            
-         <div class="follow_container">
-             
-                    <div id="contenido" >
-                        
-                        
-                       
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Facturados</h3>
-                            </div>
-                            <div id="empleados_form">
-                            <div class="panel-body">
-                                <table class="table table-striped">
+                              ?>
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
+          <div id="result">
+          </div>
+          </div>
+      </div>
+      <div id="listafacturados" class="oculto">
+          <div class="follow_container">
+              <div id="contenido" >
+                  <div class="panel panel-primary">
+                      <div class="panel-heading">
+                          <h3 class="panel-title">Facturados</h3>
+                      </div>
+                      <div id="empleados_form">
+                          <div class="panel-body">
+                              <table class="table table-striped">
                                 <thead>
                                 <th>#</th>
                                 <th>ID</th>
                                 <th>Patente</th>
-                                   <th>Color</th>
-
-                                   <th>Marca</th>
-
+                                <th>Color</th>
+                                <th>Marca</th>
                                 <th>Fecha Ingreso</th>
                                 <th>Hora Ingreso</th>
                                 <th>Fecha Salida</th>
                                 <th>Hora Salida</th>
                                 <th>Tiempo Transcurrido</th>
-                              
                                 <th>Cochera</th>
-                                  <th>Importe $</th>
+                                <th>Importe $</th>
                                 <th>Accion</th>
-                                 </thead>
+                                </thead>
                                     <tbody>
                                         <?php
                                         //require './clases/AccesoDatos.php';
@@ -1147,39 +1129,24 @@ runOnLoad(function(){
                                     
                                         ?>
                                     </tbody>
-                                </table>
-                               
-                            </div>
-                        </div>
-                    </div>
-                    <div id="result">
-                    </div>
-              
-                    </div>
-                    </div>
-
-            </div>
-              
-                 
-
-
-</div>
-
-
-
-
-                    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
-                      <div class="modal-dialog">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title">Nuevo Usuario</h4>
+                              </table>
                           </div>
-                      
-                          <form role="form" name="register" class="formulario" id= "register_form" method="post" enctype="multipart/form-data" action="" >
-                           <div id="resultado"></div>
-
-
+                      </div>
+                  </div>
+               <div id="result">
+               </div>
+              </div>
+          </div>
+       </div>
+       <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Nuevo Usuario</h4>
+                     </div>
+                      <form role="form" name="register" class="formulario" id= "register_form" method="post" enctype="multipart/form-data" action="" >
+                          <div id="resultado"></div>
                             <div class="col-lg-12">
                               <div class="form-group">
                                 <label>Nombre</label>
@@ -1193,10 +1160,10 @@ runOnLoad(function(){
                                 <label class="error" for="apellido" id="apell_error">Debe introducir su apellido.</label><br><br>
                               </div>
                                
-                           <div class="form-group has-error">
-                            <label>Correo Electronico</label>
-                            <input class="form-control" type="email" name="correo" id="correo" placeholder="Correo electrónico" />
-                              <span id="error" class="help-block"></span>
+                              <div class="form-group has-error">
+                                <label>Correo Electronico</label>
+                                <input class="form-control" type="email" name="correo" id="correo" placeholder="Correo electrónico" />
+                                <span id="error" class="help-block"></span>
                                 <label class="error" for="correo" id="correo_error" >Debe introducir su correo.</label><br><br>
                               </div>
                           
@@ -1210,52 +1177,42 @@ runOnLoad(function(){
                           
                               <div class="form-group">
                                <label >Perfil</label>
-                               
-                           <select id="perfil">
-                                    <option  value="admin">Admin</option>
+                                    <select id="perfil">
+                                        <option  value="admin">Admin</option>
                                         <option  value="user">User</option>
-               
-                                       </select>
-                                 
-                                  </div>
-                                  <div class="form-group">
-                                  <label>Horario</label>
-                                 
-                              <select id="turno">
+                                    </select>
+                              </div>
+                              <div class="form-group">
+                                <label>Horario</label>
+                                    <select id="turno">
                                        <option  value="mañana">Mañana</option>
                                            <option  value="tarde">Tarde</option>
                                            <option  value="noche">Noche</option>
-                                          </select>
-                                    </div>
-                                   
-      
-        <div class="form-group">
+                                    </select>
+                              </div>
+                              <div class="form-group">
                                 <label>Fecha de alta</label>
-
-<input type="date"  id="fechacreacion" name="fecha">
- </div>
-
-   <div>
-                                  <label>Seleccione foto de perfil empleado</label>
+                                <input type="date"  id="fechacreacion" name="fecha">
+                              </div>
+                            <div>
+                             <label>Seleccione foto de perfil empleado</label>
                              <input type="file" name="foto" id="foto" />
                              <img  src="./fotosEmpleados/pordefecto.jpg" width="50" height="50" class="fotoform"/>
- 
-              
-                </div>
+                             </div>
                                    
                               <button type="submit"   class="btn btn-info btn-lg" id="enviar-btn" >
                                 <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Registrar
                               </button>
               
-                            </div>
-                          </form>
-                       
+                        </div>
+                      </form>
+             
                           <div class="modal-footer">
                             <button type="button" class="btn btn-danger btn-circle" data-dismiss="modal"><i class="fa fa-times"></i>x</button>
                           </div>
-                        </div>
-                      </div>
-                    </div>
+        </div>
+        </div>
+          </div>           
               
 
 
@@ -1269,10 +1226,10 @@ runOnLoad(function(){
                             <h4 class="modal-title">Modificar Usuario</h4>
                           </div>
                       
-                          <form role="form" name="register" class="formulario" id= "edit_form" method="post" enctype="multipart/form-data" action="" >
+                    <form role="form" name="register" class="formulario" id= "edit_form" method="post" enctype="multipart/form-data" action="" >
                            <div id="resultado"></div>
 
-                          <input name="id" id="idamodif" value="" class="form-control" style="visibility:hidden" >
+                            <input name="id" id="idamodif" value="" class="form-control" style="visibility:hidden" >
                             <div class="col-lg-12">
                               <div class="form-group">
                                 <label>Nombre</label>
@@ -1286,65 +1243,52 @@ runOnLoad(function(){
                                 <label class="error" for="apellido" id="apell_error">Debe introducir su apellido.</label><br><br>
                               </div>
                                
-                           <div class="form-group has-error">
-                            <label>Correo Electronico</label>
-                            <input class="form-control" type="email" name="correo" id="correomodif" placeholder="Correo electrónico" />
-                              <span id="error" class="help-block"></span>
-                                <label class="error" for="correo" id="correo_error" >Debe introducir su correo.</label><br><br>
-                              </div>
-                          
-                              
-                              <div class="form-group">
+                          <div class="form-group has-error">
+                              <label>Correo Electronico</label>
+                               <input class="form-control" type="email" name="correo" id="correomodif" placeholder="Correo electrónico" />
+                               <span id="error" class="help-block"></span>
+                              <label class="error" for="correo" id="correo_error" >Debe introducir su correo.</label><br><br>
+                          </div>
+                          <div class="form-group">
                                 <label>Contraseña</label>
                                 <input name="clave"  id="clavemodif" value="" class="form-control" required="">
                                 <label class="error" for="clave" id="clave_error" placeholder="Ingrese contraseña"  >Debe introducir su contraseña.</label><br><br>
-                              </div>
-                             
-                          
-                              <div class="form-group">
-                               <label >Perfil</label>
-                               
-                           <select id="perfilmodif">
+                          </div>
+                          <div class="form-group">
+                            <label >Perfil</label>
+                                   <select id="perfilmodif">
                                     <option  value="admin">Admin</option>
-                                        <option  value="user">User</option>
-               
-                                       </select>
-                                 
-                                  </div>
-                                  <div class="form-group">
-                                  <label>Horario</label>
-                                 
-                              <select id="turnomodif">
-                                       <option  value="mañana">Mañana</option>
-                                           <option  value="tarde">Tarde</option>
-                                           <option  value="noche">Noche</option>
-                                          </select>
-                                    </div>
+                                    <option  value="user">User</option>
+                                    </select>
+                          </div>
+                           <div class="form-group">
+                              <label>Horario</label>
+                                  <select id="turnomodif">
+                                      <option  value="mañana">Mañana</option>
+                                      <option  value="tarde">Tarde</option>
+                                      <option  value="noche">Noche</option>
+                                  </select>
+                          </div>
                                    
       
-        <div class="form-group">
-                                <label>Fecha de alta</label>
+                              <div class="form-group">
+                                 <label>Fecha de alta</label>
+                                    <input type="date"  id="fechacreacionmodif" name="fecha">
+                              </div>
 
-<input type="date"  id="fechacreacionmodif" name="fecha">
- </div>
-
-   <div>
-                                  <label>Seleccione foto de perfil empleado</label>
-                                      <input name="fotoanterior" id="fotoanterior" value="" class="form-control" style="visibility:hidden" >
-                            
-                             <input type="file" name="foto" id="fotomodif" />
-                             <img id="imagenamodificar" src=""  width="50" height="50" class="fotoform"/>
-                           
-                                
-              
-                </div>
+                              <div>
+                                <label>Seleccione foto de perfil empleado</label>
+                                   <input name="fotoanterior" id="fotoanterior" value="" class="form-control" style="visibility:hidden" >
+                                   <input type="file" name="foto" id="fotomodif" />
+                                   <img id="imagenamodificar" src=""  width="50" height="50" class="fotoform"/>
+                              </div>
                                    
                                 <button type="submit"   class="btn btn-info btn-lg" id="editar-btn" >
                                 <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Modificar
                               </button>
               
                             </div>
-                          </form>
+                   </form>
                        
                           <div class="modal-footer">
                             <button type="button" class="btn btn-danger btn-circle" data-dismiss="modal"><i class="fa fa-times"></i>x</button>
@@ -1357,19 +1301,19 @@ runOnLoad(function(){
  
 
     
-        <div id="listaprecios" class="oculto">
+      <div id="listaprecios" class="oculto">
         
 
         <div class="container">
-        <h2>Lista de Precios</h2>
-        <ul class="list-group">
+           <h2>Lista de Precios</h2>
+              <ul class="list-group">
         
-          <li class="list-group-item">Precio por hora: $10</li>
-           <li class="list-group-item">Precio por media estadia:  $90</li>
-          <li class="list-group-item">Precio por estadia completa:  $170</li>
+                      <li class="list-group-item">Precio por hora: $10</li>
+                      <li class="list-group-item">Precio por media estadia:  $90</li>
+                      <li class="list-group-item">Precio por estadia completa:  $170</li>
           
-         </ul>
-      </div>
+              </ul>
+        </div>
 
       </div>
 
@@ -1384,28 +1328,28 @@ runOnLoad(function(){
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             <h4 class="modal-title">Detalle de estadia</h4>
                           </div>
-                          <div id="edit_form">
-                          <form role="form" name="register" method="post" action="" >
-                          <fieldset disabled>
+                              <div id="edit_form">
+                          
+                                 <form role="form" name="register" method="post" action="" >
+                                      <fieldset disabled>
                             <div class="col-xs-6">
                             
-                               
-                                <input name="id" id="idsalida" value="" class="form-control" style="visibility:hidden" >
+                              <input name="id" id="idsalida" value="" class="form-control" style="visibility:hidden" >
                             
                               <div class="form-group">
-                              <label>Patente</label>
+                               <label>Patente</label>
                                 <input name="patente" id="patenteasalir" value="" class="form-control" >
                                
                               </div>
 
-                                   <div class="form-group">
-                              <label>Color</label>
+                              <div class="form-group">
+                                 <label>Color</label>
                                 <input name="color" id="colorasalir" value="" class="form-control" >
                                
                               </div>
 
-                                   <div class="form-group">
-                              <label>Marca</label>
+                              <div class="form-group">
+                                <label>Marca</label>
                                 <input name="marca" id="marcaasalir" value="" class="form-control" >
                                
                               </div>
@@ -1416,7 +1360,7 @@ runOnLoad(function(){
                           
                               </div>
               
-                              <div class="form-group">
+                            <div class="form-group">
                               <label>Hora Ingreso</label>
                               <input name="horaingreso" id="horaingreso" value="" class="form-control" >
                         
@@ -1436,32 +1380,25 @@ runOnLoad(function(){
                               <div class="form-group">
                                 <label>Tiempo Transcurrido</label>
                                 <input name="tiempotranscurrido"  id="tiempotranscurrido" value="" class="form-control" >
-                                
                               </div>
-                                <div class="form-group">
+                              <div class="form-group">
                                 <label>Cochera</label>
                                 <input name="cochera"  id="cochera" value="" class="form-control">
-                                
                               </div>
                               <div class="form-group">
                                 <label>Importe  $$ </label>
                                 <input name="importe"  id="importe" value="" class="form-control" >
-                                
                               </div>
-                              </fieldset>
+                              </div>
+                          </fieldset>
               
                               <div class="form-group">
-              
-              
-              
-              
-                              <button type="submit"   class="btn btn-info btn-lg" id="sacar-btn" >
-                                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Cobrar
-                              </button>
-              
-                            </div>
-                          </form>
-                          </div>
+                                <button type="submit"   class="btn btn-info btn-lg" id="sacar-btn" >
+                                 <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Cobrar
+                                </button>
+                              </div>
+                                      </form>
+                        </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-danger btn-circle" data-dismiss="modal"><i class="fa fa-times"></i>x</button>
                           </div>
@@ -1469,17 +1406,18 @@ runOnLoad(function(){
                       </div>
                     </div>
                 </div>
-            </div>
+             </div>
         </div>
          
           
         <div class="modal fade" id="modal4" tabindex="-1" role="dialog" aria-hidden="true">
-                      <div class="modal-dialog">
+            <div class="modal-dialog">
                         <div class="modal-content">
                           <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             <h4 class="modal-title">Modificar Facturado</h4>
                           </div>
+                         
                           <div id="edit_form">
                           <form role="form" name="register" id="formfacturado" method="post" action="" >
                             <div class="col-lg-12">
@@ -1488,26 +1426,27 @@ runOnLoad(function(){
                                 <input name="id" id="idamodificarfact" value="" class="form-control" style="visibility:hidden" >
                             
                               <div class="form-group">
-                              <label>Patente</label>
+                                <label>Patente</label>
                                 <input name="patente" id="patentemodif" value="" class="form-control" >
                                 <label class="error" for="patente" id="name_error">Debe introducir patente.</label><br><br>
                               </div>
 
-                                <div class="form-group">
-                              <label>Color</label>
-                                <input name="color" id="colormodif" value="" class="form-control" >
-                                <label class="error" for="color" id="name_error">Debe introducir color de vehiculo.</label><br><br>
-                              </div>
+                            <div class="form-group">
+                                 <label>Color</label>
+                                 <input name="color" id="colormodif" value="" class="form-control" >
+                                 <label class="error" for="color" id="name_error">Debe introducir color de vehiculo.</label><br><br>
+                            </div>
 
-                                <div class="form-group">
-                              <label>Marca</label>
+                            <div class="form-group">
+                                <label>Marca</label>
                                 <input name="marca" id="marcamodif" value="" class="form-control" >
                                 <label class="error" for="marca" id="name_error">Debe introducir marca de vehiculo.</label><br><br>
+                            </div>
+                               
+                              <div class="form-group">
+                                 <label>Cochera</label>
+                                  <input name="cochera"  id="cocheramodif" value="" class="form-control">
                               </div>
-                                  </div>
-                                <div class="form-group">
-                                <label>Cochera</label>
-                                <input name="cochera"  id="cocheramodif" value="" class="form-control">
                               <div class="form-group">
                                 <label>Hora de ingreso</label>
                                 <input name="horaingreso" id="horaingresomodif" value="" class="form-control" >
@@ -1558,11 +1497,11 @@ runOnLoad(function(){
                             <button type="button" class="btn btn-danger btn-circle" data-dismiss="modal"><i class="fa fa-times"></i>x</button>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                </div>
             </div>
         </div>
+    </div>
+  </div>
+  </div>
 
 
 

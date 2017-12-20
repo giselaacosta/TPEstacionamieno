@@ -173,7 +173,7 @@ class vehiculo
 	public static function TraerTodoLosEstacionadosPorBusqueda($palabra)
 	{
 			$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-			$consulta =$objetoAccesoDato->RetornarConsulta("select id,patente as patente, fechaingreso as fechaingreso,horaingreso as horaingreso ,color as color ,marca as marca  ,cochera as cochera  from estacionados WHERE patente like  %.$palabra.% ");
+			$consulta =$objetoAccesoDato->RetornarConsulta("select id,patente as patente, fechaingreso as fechaingreso,horaingreso as horaingreso ,color as color ,marca as marca  ,cochera as cochera  from estacionados WHERE patente like  '%$palabra%' ");
 			$consulta->execute();			
 			return $consulta->fetchAll(PDO::FETCH_CLASS, "vehiculo");		
 	}

@@ -1,7 +1,7 @@
 <?php
 require './clases/AccesoDatos.php';
-require './clases/vehiculo.php';
-require './clases/Cochera.php';
+require './clases/Empleado.php';
+
 
 
 $busqueda=$_POST['buscar'];
@@ -14,10 +14,10 @@ if(isset($busqueda) )
 
 {
     $pdo = AccesoDatos::connect();
-    $estacionados = vehiculo::TraerTodoLosEstacionadosPorBusqueda($busqueda);
+    $empleados = Empleado::TraerTodoLosEmpleadosPorBusqueda($busqueda);
 
    // return $estacionados;
-    echo json_encode($estacionados,JSON_FORCE_OBJECT);
+    echo json_encode($empleados,JSON_FORCE_OBJECT);
  
     
 }

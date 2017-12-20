@@ -159,7 +159,13 @@ class Empleado
 			
 	}
 
-
+	public static function TraerTodoLosEmpleadosPorBusqueda($palabra)
+	{
+			$objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
+			$consulta =$objetoAccesoDato->RetornarConsulta("select id,nombre as nombre, apellido as apellido,clave as clave,mail as mail,turno as turno,perfil as perfil,fechacreacion as fechacreacion,foto as foto from empleados  WHERE apellido like  '%$palabra%' ");
+			$consulta->execute();			
+			return $consulta->fetchAll(PDO::FETCH_CLASS, "Empleado");		
+	}
    
 
 

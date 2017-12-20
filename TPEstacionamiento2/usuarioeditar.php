@@ -39,12 +39,7 @@ $return = Array('ok' => FALSE, 'msg' => "Ocurrio un error al subir el archivo. N
 }
 
 
-if(isset($fotoanterior)&& $fotoanterior=="pordefecto.jpg")
-{
 
-$fotonombre= $fotoanterior;
-
-}
 
 if(isset($fotoanterior) && $fotoanterior!="pordefecto.jpg")
 {
